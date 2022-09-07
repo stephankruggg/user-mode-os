@@ -15,11 +15,28 @@ class CPU
         {
         private:
             static const unsigned int STACK_SIZE = Traits<CPU>::STACK_SIZE;
+            void defaultContext()
+            {
+                _stack = new char[STACK_SIZE];
+                _context.uc_link = 0;
+                _context.uc_stack.ss_sp = _stack;
+                _context.uc_stack.ss_size = STACK_SIZE;
+                _context.uc_stack.ss_flags = 0;
+                save();
+            }
         public:
-            Context() { _stack = 0; }
+            Context() 
+            {
+                defaultContext();
+            }
 
             template<typename ... Tn>
-            Context(void (* func)(Tn ...), Tn ... an);
+            Context(void (* func)(Tn ...), Tn ... an)
+            {
+                // errno -> usado para erros
+                defaultContext();
+                makecontext(&_context, (void (*)(void))func, sizeof...(Tn), an...);
+            }
 
             ~Context();
 
@@ -41,4 +58,3 @@ class CPU
 __END_API
 
 #endif
-
