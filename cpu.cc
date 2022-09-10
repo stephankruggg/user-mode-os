@@ -6,12 +6,18 @@ __BEGIN_API
 void CPU::Context::save()
 {
     // Ver casos de erro (retorno -1)...
-    getcontext(&_context);
+    if(getcontext(&_context) == -1) {
+    	std::cout << "Nao foi possivel salvar o contexto atual" << std::endl;
+    	abort();
+    }
 }
 
 void CPU::Context::load()
 {
-    setcontext(&_context);
+    if(setcontext(&_context) == -1) {
+    	std::cout << "Nao foi possivel restaurar o contexto" << std::endl;
+    	abort();
+    }
 }
 
 CPU::Context::~Context()
@@ -21,7 +27,10 @@ CPU::Context::~Context()
 
 void CPU::switch_context(Context *from, Context *to)
 {
-    swapcontext(&from->_context, &to->_context);
+    if(swapcontext(&from->_context, &to->_context) == -1) {
+    	std::cout << "Nao foi possivel fazer a troca de contextos" << std::endl;
+    	abort();
+    }
 }
 
 __END_API
