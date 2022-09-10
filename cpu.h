@@ -21,7 +21,7 @@ class CPU
             {
                 _stack = new char[STACK_SIZE];
                 if (_stack == nullptr) {
-                    std::cout << "Sem espaco para a alocacao da pilha" << std::endl;
+                    std::cout << "Sem espaço para a alocação da pilha." << std::endl;
                     abort();
                 } else {
                     _context.uc_link = 0;
@@ -45,7 +45,7 @@ class CPU
                 errno = 0;
                 makecontext(&_context, (void (*)(void))func, sizeof...(Tn), an...);
                 if(errno != 0) {
-                    std::cout << "Erro apontado por makecontext()" << std::endl;
+                    std::cout << "Erro apontado por makecontext()." << std::endl;
                     abort();
                 }
             }
