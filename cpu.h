@@ -19,6 +19,7 @@ class CPU
             static const unsigned int STACK_SIZE = Traits<CPU>::STACK_SIZE;
             void defaultContext()
             {
+                save();
                 _stack = new char[STACK_SIZE];
                 if (_stack == nullptr) {
                     std::cout << "Sem espaço para a alocação da pilha." << std::endl;
@@ -28,7 +29,6 @@ class CPU
                     _context.uc_stack.ss_sp = _stack;
                     _context.uc_stack.ss_size = STACK_SIZE;
                     _context.uc_stack.ss_flags = 0;
-                    save();
                 }
             }
         public:
