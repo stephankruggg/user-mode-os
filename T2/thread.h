@@ -51,15 +51,34 @@ public:
      * Qualquer outro método que você achar necessário para a solução.
      */ 
 
+    Context * context();
+
 private:
     int _id;
     Context * volatile _context;
     static Thread * _running;
-
+    static int _current_id;
+    static Thread * _main;
     /*
      * Qualquer outro atributo que você achar necessário para a solução.
      */ 
 };
+
+template<typename ... Tn>
+Thread::Thread(void (* entry)(Tn ...), Tn ... an)
+{
+    if (entry == NULL)
+    {
+        abort();
+    }
+    _id = _current_id++;
+    _context = new Context(entry, an...);
+    
+    if (_main == NULL)
+    {
+        _main = this;
+    }
+}
 
 __END_API
 

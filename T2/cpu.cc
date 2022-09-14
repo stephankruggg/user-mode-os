@@ -29,7 +29,7 @@ CPU::Context::~Context()
 
 void CPU::switch_context(Context *from, Context *to)
 {
-    if(swapcontext(&from->_context, &to->_context) == -1) {
+    if (swapcontext(&from->_context, &to->_context) == -1) {
     	std::cout << "Não foi possível fazer a troca de contextos." << std::endl;
     	abort();
     }

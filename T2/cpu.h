@@ -40,7 +40,6 @@ class CPU
             template<typename ... Tn>
             Context(void (* func)(Tn ...), Tn ... an)
             {
-                // errno -> usado para erros
                 defaultContext();
                 errno = 0;
                 makecontext(&_context, (void (*)(void))func, sizeof...(Tn), an...);
