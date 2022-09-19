@@ -1,6 +1,7 @@
 #ifndef thread_h
 #define thread_h
 
+#include <errno.h>
 #include "cpu.h"
 #include "traits.h"
 #include "debug.h"

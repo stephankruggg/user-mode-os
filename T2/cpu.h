@@ -5,6 +5,7 @@
 #include <iostream>
 #include <errno.h>
 #include "traits.h"
+#include "debug.h"
 
 
 __BEGIN_API
@@ -19,10 +20,11 @@ class CPU
             static const unsigned int STACK_SIZE = Traits<CPU>::STACK_SIZE;
             void defaultContext()
             {
+            	db<CPU>(TRC) << "Construtor de Context iniciado\n";
                 save();
                 _stack = new char[STACK_SIZE];
                 if (_stack == nullptr) {
-                    std::cout << "Sem espaço para a alocação da pilha." << std::endl;
+                    db<CPU>(ERR) << "Não foi possível alocar memória para a pilha\n";
                     abort();
                 } else {
                     _context.uc_link = 0;
@@ -30,6 +32,7 @@ class CPU
                     _context.uc_stack.ss_size = STACK_SIZE;
                     _context.uc_stack.ss_flags = 0;
                 }
+                db<CPU>(TRC) << "Context construido com sucesso.\n";
             }
         public:
             Context() 
@@ -42,11 +45,13 @@ class CPU
             {
                 defaultContext();
                 errno = 0;
+                db<CPU>(TRC) << "Associando funcao ao contexto( makecontext() ).\n";
                 makecontext(&_context, (void (*)(void))func, sizeof...(Tn), an...);
                 if(errno != 0) {
-                    std::cout << "Erro apontado por makecontext()." << std::endl;
+                    db<CPU>(ERR)<< "Erro apontado por makecontext()\n";
                     abort();
                 }
+                db<CPU>(TRC) << "Funcao associada com sucesso.\n";
             }
 
             ~Context();
