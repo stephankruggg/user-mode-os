@@ -1,7 +1,6 @@
 #ifndef thread_h
 #define thread_h
 
-#include <errno.h>
 #include "cpu.h"
 #include "traits.h"
 #include "debug.h"
@@ -70,13 +69,16 @@ Thread::Thread(void (* entry)(Tn ...), Tn ... an)
 {
     if (entry == NULL)
     {
+        db<Thread>(ERR) << "Construtor de Thread falhou por ponteiro nulo. Finalizando execução.\n";
         abort();
     }
+    db<Thread>(TRC) << "Criando o contexto da Thread.\n";
     _id = _current_id++;
     _context = new Context(entry, an...);
     
     if (_main == NULL)
     {
+        db<Thread>(TRC) << "Associando ponteiro para a main.\n";
         _main = this;
     }
 }

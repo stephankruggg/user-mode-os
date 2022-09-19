@@ -3,7 +3,8 @@
 
 #include <ucontext.h>
 #include <iostream>
-#include <errno.h>
+#include <cerrno>
+#include <cstring>
 #include "traits.h"
 #include "debug.h"
 
@@ -20,11 +21,11 @@ class CPU
             static const unsigned int STACK_SIZE = Traits<CPU>::STACK_SIZE;
             void defaultContext()
             {
-            	db<CPU>(TRC) << "Construtor de Context iniciado\n";
+            	db<CPU>(TRC) << "Construtor de Context iniciado.\n";
                 save();
                 _stack = new char[STACK_SIZE];
                 if (_stack == nullptr) {
-                    db<CPU>(ERR) << "Não foi possível alocar memória para a pilha\n";
+                    db<CPU>(ERR) << "Não foi possível alocar memória para a pilha. Finalizando execução.\n";
                     abort();
                 } else {
                     _context.uc_link = 0;
@@ -32,7 +33,7 @@ class CPU
                     _context.uc_stack.ss_size = STACK_SIZE;
                     _context.uc_stack.ss_flags = 0;
                 }
-                db<CPU>(TRC) << "Context construido com sucesso.\n";
+                db<CPU>(TRC) << "Context construído com sucesso.\n";
             }
         public:
             Context() 
@@ -44,14 +45,14 @@ class CPU
             Context(void (* func)(Tn ...), Tn ... an)
             {
                 defaultContext();
-                errno = 0;
-                db<CPU>(TRC) << "Associando funcao ao contexto( makecontext() ).\n";
+                db<CPU>(TRC) << "Associando função ao contexto( makecontext() ).\n";
                 makecontext(&_context, (void (*)(void))func, sizeof...(Tn), an...);
-                if(errno != 0) {
-                    db<CPU>(ERR)<< "Erro apontado por makecontext()\n";
+                if (errno != 0) 
+                {
+                    db<CPU>(ERR)<< "Erro apontado por makecontext(). Finalizando execução. Erro: " << strerror(errno) << "\n";
                     abort();
                 }
-                db<CPU>(TRC) << "Funcao associada com sucesso.\n";
+                db<CPU>(TRC) << "Função associada com sucesso.\n";
             }
 
             ~Context();

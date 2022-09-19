@@ -5,24 +5,26 @@ __BEGIN_API
 
 void CPU::Context::save()
 {
-    // Ver casos de erro (retorno -1)...
-    if (getcontext(&_context) == -1) {
-    	db<CPU>(ERR) << "Não foi possível salvar o contexto atual.\n";
+    if (getcontext(&_context) == -1) 
+    {
+    	db<CPU>(ERR) << "Não foi possível salvar o contexto atual. Finalizando execução.\n";
     	abort();
     }
 }
 
 void CPU::Context::load()
 {
-    if (setcontext(&_context) == -1) {
-    	db<CPU>(ERR) << "Não foi possível restaurar o contexto.\n";
+    if (setcontext(&_context) == -1) 
+    {
+    	db<CPU>(ERR) << "Não foi possível restaurar o contexto. Finalizando execução.\n";
     	abort();
     }
 }
 
 CPU::Context::~Context()
 {
-    if (_stack) {
+    if (_stack) 
+    {
     	db<CPU>(TRC) << "Contexto deletado, memória desalocada.\n";
         delete _stack;
     }
@@ -30,8 +32,9 @@ CPU::Context::~Context()
 
 void CPU::switch_context(Context *from, Context *to)
 {
-    if (swapcontext(&from->_context, &to->_context) == -1) {
-    	db<CPU>(ERR) << "Não foi possível fazer a troca de contextos na CPU.\n";
+    if (swapcontext(&from->_context, &to->_context) == -1) 
+    {
+    	db<CPU>(ERR) << "Não foi possível realizar a troca de contextos na CPU.\n";
     }
 }
 
