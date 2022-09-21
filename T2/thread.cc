@@ -17,15 +17,22 @@ int Thread::switch_context(Thread * prev, Thread * next)
     	db<Thread>(WRN) << "Thread::switch_context() falhou por ponteiro nulo.\n";
         return -1;
     }
-    
-    CPU::switch_context(prev->context(), next->context());
-    if (errno != 0)
+    if (prev->context() == NULL or next->context() == NULL)
     {
-        db<Thread>(WRN) << "Não foi possível realizar a troca de contextos entre as threads. Erro: " << strerror(errno) << "\n";
+    	db<Thread>(WRN) << "Thread::switch_context() falhou por ponteiro nulo.\n";
         return -1;
     }
     
     _running = next;
+    
+    CPU::switch_context(prev->context(), next->context());
+    if (errno != 0)
+    {
+    	_running = prev;
+        db<Thread>(WRN) << "Não foi possível realizar a troca de contextos entre as threads. Erro: " << strerror(errno) << "\n";
+        return -1;
+    }
+    
     db<Thread>(TRC) << "Thread::switch_context() concluído com sucesso.\n";
     return 0;
 }
@@ -40,6 +47,12 @@ void Thread::thread_exit (int exit_code)
     }
     _current_id--;
     db<Thread>(TRC) << "Thread::thread_exit() finalizado com sucesso.\n";
+    /*
+	    if(this != _main) {
+	    	db<Thread>(TRC) << "Retornando para a main após um thread_exit().\n";
+	    	//_main->context()->load();
+	    }
+    */
 }
 
 int Thread::id()
