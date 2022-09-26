@@ -25,8 +25,7 @@ int Thread::switch_context(Thread * prev, Thread * next)
     
     _running = next;
     
-    CPU::switch_context(prev->context(), next->context());
-    if (errno != 0)
+    if (CPU::switch_context(prev->context(), next->context()) != 0)
     {
     	_running = prev;
         db<Thread>(WRN) << "Não foi possível realizar a troca de contextos entre as threads. Erro: " << strerror(errno) << "\n";
@@ -47,12 +46,6 @@ void Thread::thread_exit (int exit_code)
     }
     _current_id--;
     db<Thread>(TRC) << "Thread::thread_exit() finalizado com sucesso.\n";
-    /*
-	    if(this != _main) {
-	    	db<Thread>(TRC) << "Retornando para a main após um thread_exit().\n";
-	    	//_main->context()->load();
-	    }
-    */
 }
 
 int Thread::id()

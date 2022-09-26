@@ -23,24 +23,24 @@ struct Traits {
 template<> struct Traits<CPU>
 {
     static const unsigned int STACK_SIZE = 64000; //Adicionar aqui a declaração do tamanho da Pilha
-    static const bool debugged = true;
+    static const bool debugged = false;
 };
 
 template<> struct Traits<Debug>: public Traits<void>
 {
-    static const bool error = true;
-    static const bool warning = true;
-    static const bool info = true;
-    static const bool trace = true;
+    static const bool error = false;
+    static const bool warning = false;
+    static const bool info = false;
+    static const bool trace = false;
 };
 
 template<> struct Traits<System>: public Traits<void>
 {
-    static const bool debugged = true;
+    static const bool debugged = false;
 };
 template<> struct Traits<Thread>: public Traits<void>
 {
-    static const bool debugged = true;
+    static const bool debugged = false;
 };
 
 

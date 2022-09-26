@@ -47,10 +47,6 @@ public:
      */ 
     int id();
 
-    /*
-     * Qualquer outro método que você achar necessário para a solução.
-     */ 
-
     Context * context();
 
 private:
@@ -59,9 +55,6 @@ private:
     static Thread * _running;
     static int _current_id;
     static Thread * _main;
-    /*
-     * Qualquer outro atributo que você achar necessário para a solução.
-     */ 
 };
 
 template<typename ... Tn>

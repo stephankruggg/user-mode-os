@@ -30,12 +30,14 @@ CPU::Context::~Context()
     }
 }
 
-void CPU::switch_context(Context *from, Context *to)
+int CPU::switch_context(Context *from, Context *to)
 {
     if (swapcontext(&from->_context, &to->_context) == -1) 
     {
     	db<CPU>(ERR) << "Não foi possível realizar a troca de contextos na CPU.\n";
+        return -1;
     }
+    return 0;
 }
 
 __END_API
