@@ -37,8 +37,7 @@ void Thread::dispatcher()
     while (_current_id > 2)
     {   
         db<Thread>(TRC) << "Escolhendo próxima thread a ser executada.\n";
-        Ready_Queue::Element * next = _ready.remove_head();
-        Thread * next_thread = next->object();
+        Thread * next_thread = _ready.remove_head()->object();
         
         db<Thread>(TRC) << "Reinserindo thread dispatcher na fila.\n";
         _dispatcher._state = READY;
@@ -58,21 +57,25 @@ void Thread::dispatcher()
 void Thread::yield()
 {
     db<Thread>(TRC) << "Escolhendo próxima thread a ser executada.\n";
-    Thread * next = _ready.remove_head()->object();
+    Thread * next_thread = _ready.remove_head()->object();
     
-    if (_running->_state != FINISHING && _running != &_main)
+    if (_running->_state != FINISHING)
     {   
-        db<Thread>(TRC) << "Reinserindo thread na fila.\n";
-        int now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
-        _running->_link->rank(now);
-        _ready.insert(_running->_link);
+        if (_running != &_main)
+        {
+            db<Thread>(TRC) << "Reinserindo thread na fila.\n";
+            int now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+            _running->_link->rank(now);
+            _ready.insert(_running->_link);
+        }
+        _running->_state = READY;
     }
     
     db<Thread>(TRC) << "Trocando contexto para a thread da vez.\n";
     Thread * current = _running;
-    next->_state = RUNNING;
-    _running = next;
-    switch_context(current, next);
+    next_thread->_state = RUNNING;
+    _running = next_thread;
+    switch_context(current, next_thread);
 }
 
 int Thread::switch_context(Thread * prev, Thread * next)
