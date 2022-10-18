@@ -122,7 +122,7 @@ void Thread::thread_exit (int exit_code)
     db<Thread>(TRC) << "Thread::thread_exit chamado.\n";
     _state = FINISHING;
     _current_id--;
-    db<Thread>(TRC) << "Thread::thread_exit finalizado com sucesso. Cedendo a vez ao dispatcher.\n";
+    db<Thread>(TRC) << "Thread::thread_exit finalizado com sucesso. Cedendo a vez à próxima thread.\n";
     yield();
 }
 
