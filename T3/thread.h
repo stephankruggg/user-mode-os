@@ -64,6 +64,8 @@ public:
      */ 
     int id();
 
+    Context * context();
+
     /*
      * NOVO MÉTODO DESTE TRABALHO.
      * Daspachante (disptacher) de threads. 
@@ -78,7 +80,6 @@ public:
      * Cria as Threads main e dispatcher.
      */ 
     static void init(void (*main)(void *));
-
 
     /*
      * Devolve o processador para a thread dispatcher que irá escolher outra thread pronta
@@ -99,12 +100,13 @@ private:
     int _id;
     Context * volatile _context;
     static Thread * _running;
-    
+    static int _current_id;
+
     static Thread _main; 
     static CPU::Context _main_context;
     static Thread _dispatcher;
     static Ready_Queue _ready;
-    Ready_Queue::Element _link;
+    Ready_Queue::Element * _link;
     volatile State _state;
 
     /*
@@ -114,9 +116,24 @@ private:
 };
 
 template<typename ... Tn>
-inline Thread::Thread(void (* entry)(Tn ...), Tn ... an) : /* inicialização de _link */
+inline Thread::Thread(void (* entry)(Tn ...), Tn ... an) /* inicialização de _link */
 {
-    //IMPLEMENTAÇÃO DO CONSTRUTOR
+    if (entry == NULL)
+    {
+        db<Thread>(ERR) << "Construtor de Thread falhou por ponteiro nulo. Finalizando execução.\n";
+        abort();
+    }
+
+    db<Thread>(TRC) << "Criando o contexto da Thread.\n";
+    _id = _current_id++;
+    _context = new Context(entry, an...);
+    _state = READY;
+
+    if (_id > 0) {
+        db<Thread>(TRC) << "Inserindo thread na fila.\n";
+        _link = new Ready_Queue::Element(this, (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count()));
+        _ready.insert(_link); 
+    }
 }
 
 __END_API
