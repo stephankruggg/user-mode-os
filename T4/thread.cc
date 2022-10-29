@@ -10,7 +10,7 @@ Thread * Thread::_running = NULL;
 Thread Thread::_main;
 Thread Thread::_dispatcher;
 Thread::Ready_Queue Thread::_ready;
-Thread::Suspended_Queue Thread::_suspended;
+Thread::Suspended_Queue Thread::_system_suspended;
 
 void Thread::init(void (*main)(void *))
 {
@@ -19,8 +19,8 @@ void Thread::init(void (*main)(void *))
     db<Thread>(TRC) << "Criando fila de threads prontas.\n";
     new(&_ready)Ready_Queue();
 
-    db<Thread>(TRC) << "Criando fila de threads suspensas.\n";
-    new(&_suspended)Suspended_Queue();
+    db<Thread>(TRC) << "Criando fila de threads suspensas do sistema.\n";
+    new(&_system_suspended)Suspended_Queue();
     
     db<Thread>(TRC) << "Criando thread main.\n";
     std::string name = "main";
@@ -38,7 +38,7 @@ void Thread::init(void (*main)(void *))
 void Thread::dispatcher()
 {
     db<Thread>(TRC) << "Thread::dispatcher chamado.\n";
-    while (_current_id > 2)
+    while (!_ready.empty())
     {   
         db<Thread>(TRC) << "Escolhendo próxima thread a ser executada.\n";
         Thread * next_thread = _ready.remove_head()->object();
@@ -62,9 +62,9 @@ void Thread::yield()
 {
     db<Thread>(TRC) << "Escolhendo próxima thread a ser executada.\n";
     Thread * next_thread = _ready.remove_head()->object();
-    
     if (_running->_state != FINISHING && _running->_state != SUSPENDED)
     {   
+    	db<Thread>(TRC) << "Rodando não está suspensa nem terminando.\n";
         if (_running != &_main)
         {
             db<Thread>(TRC) << "Reinserindo thread na fila.\n";
@@ -82,6 +82,18 @@ void Thread::yield()
     switch_context(current, next_thread);
 }
 
+int Thread::join()
+{
+    db<Thread>(TRC) << "Thread::join chamado.\n";
+    if (this != _running && !_ready.empty())
+    {
+        _running->set_current_suspended(this->_suspended);
+        _running->suspend();
+    }
+    db<Thread>(TRC) << "Thread::join finalizado.\n";
+    return _exit_code;
+}
+
 void Thread::suspend()
 {
     db<Thread>(TRC) << "Thread::suspend chamado.\n";
@@ -90,17 +102,34 @@ void Thread::suspend()
         db<Thread>(TRC) << "Alterando estado para suspenso.\n";
         _state = SUSPENDED;
         _suspended_link = new Suspended_Queue::Element(this, (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count()));
-        _suspended.insert(_suspended_link);
+        _current_suspended->insert(_suspended_link);
         if (_running != this)
         {
             db<Thread>(TRC) << "Removendo thread da fila de prontos.\n";
             _ready.remove(this);
         } else {
-            db<Thread>(TRC) << "Chamando Thread::yield().\n";
+            db<Thread>(TRC) << "Chamando Thread::yield.\n";
             yield();
         }
     }
     db<Thread>(TRC) << "Thread::suspend finalizado.\n";
+}
+void Thread::resume() 
+{
+    db<Thread>(TRC) << "Thread::resume chamado. \n";
+    if (_state == SUSPENDED)
+    {
+        db<Thread>(TRC) << "Alterando o estado da thread. \n";
+        _state = READY;
+        if (this != &_main)
+        {
+        	int now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+        	_link->rank(now);
+        	_ready.insert(_link);
+        }
+        delete _suspended_link;
+    }
+    db<Thread>(TRC) << "Thread::resume finalizado. \n";
 }
 
 int Thread::switch_context(Thread * prev, Thread * next)
@@ -136,6 +165,11 @@ int Thread::id()
     return _id;
 }
 
+void Thread::set_current_suspended(Suspended_Queue * new_suspended_queue)
+{
+    _current_suspended = new_suspended_queue;
+}
+
 CPU::Context * Thread::context()
 {
     db<Thread>(TRC) << "Acessando contexto da Thread.\n";
@@ -147,8 +181,21 @@ void Thread::thread_exit (int exit_code)
     db<Thread>(TRC) << "Thread::thread_exit chamado.\n";
     _state = FINISHING;
     _current_id--;
-    db<Thread>(TRC) << "Thread::thread_exit finalizado com sucesso. Cedendo a vez à próxima thread.\n";
-    yield();
+
+    while (!_suspended->empty())
+    {
+        Thread * thread_to_be_resumed = _suspended->remove_head()->object();
+        thread_to_be_resumed->set_current_suspended(&_system_suspended);
+        thread_to_be_resumed->resume();
+    }
+
+    _exit_code = exit_code;
+    db<Thread>(TRC) << "Thread::thread_exit finalizado com sucesso.\n";
+    if (_running != &_main)
+    {
+        db<Thread>(TRC) << "Cedendo a vez à próxima thread.\n";
+        yield();
+    }
 }
 
 Thread::~Thread()
@@ -165,6 +212,12 @@ Thread::~Thread()
     {
         delete _link;
         db<Thread>(TRC) << "_link desalocado com sucesso.\n";
+    }
+
+    if (_suspended)
+    {
+        db<Thread>(TRC) << "_suspended desalocado com sucesso.\n";
+        delete _suspended;
     }
     
     db<Thread>(TRC) << "Thread::~Thread finalizado.\n";

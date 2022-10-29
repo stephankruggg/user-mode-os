@@ -94,7 +94,7 @@ public:
      * Este método deve suspender a thread em execução até que a thread “alvo” finalize. 
      * O inteiro retornado por join() é o argumento recebido por thread_exit().
      */
-    int join() { _running->suspend(); return 0;};
+    int join();
 
     /*
      * Suspende a Thread até que resume() seja chamado.
@@ -107,27 +107,32 @@ public:
     void resume();
 
     /*
+     * Coloca uma Thread que estava suspensa de volta para a fila de prontos.
+     */
+    void set_current_suspended(Suspended_Queue * new_suspended_queue);
+
+    /*
      * Destrutor de uma thread. Realiza todo os procedimentos para manter a consistência da classe.
      */ 
     ~Thread();
 
-    /*
-     * Qualquer outro método que você achar necessário para a solução.
-     */ 
-
 private:
-    int _id;
-    Context * volatile _context;
     static Thread * _running;
     static int _current_id;
-
     static Thread _main; 
     static CPU::Context _main_context;
     static Thread _dispatcher;
     static Ready_Queue _ready;
-    static Suspended_Queue _suspended;
+    static Suspended_Queue _system_suspended;
+    
+    int _id;
+    int _exit_code;
+    Context * volatile _context;
+    Suspended_Queue * _suspended;
+    Suspended_Queue * _current_suspended;
     Ready_Queue::Element * _link;
     Suspended_Queue::Element * _suspended_link;
+    
     volatile State _state;
 
 };
@@ -144,7 +149,10 @@ inline Thread::Thread(void (* entry)(Tn ...), Tn ... an) /* inicialização de _
     db<Thread>(TRC) << "Criando o contexto da Thread.\n";
     _id = _current_id++;
     _context = new Context(entry, an...);
+    _exit_code = -1;
     _state = READY;
+    _suspended = new Suspended_Queue();
+    _current_suspended = &_system_suspended;
 
     if (_id > 0) {
         db<Thread>(TRC) << "Inserindo thread na fila.\n";
