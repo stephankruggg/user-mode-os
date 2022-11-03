@@ -123,7 +123,6 @@ private:
     static CPU::Context _main_context;
     static Thread _dispatcher;
     static Ready_Queue _ready;
-    static Suspended_Queue _system_suspended;
     
     int _id;
     int _exit_code;
@@ -152,7 +151,7 @@ inline Thread::Thread(void (* entry)(Tn ...), Tn ... an) /* inicialização de _
     _exit_code = -1;
     _state = READY;
     _suspended = new Suspended_Queue();
-    _current_suspended = &_system_suspended;
+    _current_suspended = _suspended;
 
     if (_id > 0) {
         db<Thread>(TRC) << "Inserindo thread na fila.\n";

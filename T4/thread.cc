@@ -10,7 +10,6 @@ Thread * Thread::_running = NULL;
 Thread Thread::_main;
 Thread Thread::_dispatcher;
 Thread::Ready_Queue Thread::_ready;
-Thread::Suspended_Queue Thread::_system_suspended;
 
 void Thread::init(void (*main)(void *))
 {
@@ -18,9 +17,6 @@ void Thread::init(void (*main)(void *))
 
     db<Thread>(TRC) << "Criando fila de threads prontas.\n";
     new(&_ready)Ready_Queue();
-
-    db<Thread>(TRC) << "Criando fila de threads suspensas do sistema.\n";
-    new(&_system_suspended)Suspended_Queue();
     
     db<Thread>(TRC) << "Criando thread main.\n";
     std::string name = "main";
@@ -185,7 +181,7 @@ void Thread::thread_exit (int exit_code)
     while (!_suspended->empty())
     {
         Thread * thread_to_be_resumed = _suspended->remove_head()->object();
-        thread_to_be_resumed->set_current_suspended(&_system_suspended);
+        thread_to_be_resumed->set_current_suspended(_suspended);
         thread_to_be_resumed->resume();
     }
 
