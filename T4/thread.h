@@ -107,9 +107,14 @@ public:
     void resume();
 
     /*
-     * Coloca uma Thread que estava suspensa de volta para a fila de prontos.
+     * Altera a fila de suspensas atual da thread para a fila de suspensas alvo.
      */
     void set_current_suspended(Suspended_Queue * new_suspended_queue);
+
+    /*
+     * Altera a fila de suspensas atual da thread a fila de suspensas original da thread.
+     */
+    void reset_current_suspended();
 
     /*
      * Destrutor de uma thread. Realiza todo os procedimentos para manter a consistência da classe.

@@ -57,7 +57,7 @@ void Thread::yield()
 {
     db<Thread>(TRC) << "Escolhendo próxima thread a ser executada.\n";
     Thread * next_thread = _ready.remove_head()->object();
-    if (_running->_state != FINISHING && _running->_state != SUSPENDED)
+    if (_running->_state == RUNNING || _running->_state == READY)
     {   
     	db<Thread>(TRC) << "Rodando não está suspensa nem terminando.\n";
         if (_running != &_main)
@@ -92,7 +92,7 @@ int Thread::join()
 void Thread::suspend()
 {
     db<Thread>(TRC) << "Thread::suspend chamado.\n";
-    if (_state != SUSPENDED && _state != FINISHING) 
+    if (_state == RUNNING || _state == READY) 
     {
         db<Thread>(TRC) << "Alterando estado para suspenso.\n";
         _state = SUSPENDED;
@@ -165,6 +165,11 @@ void Thread::set_current_suspended(Suspended_Queue * new_suspended_queue)
     _current_suspended = new_suspended_queue;
 }
 
+void Thread::reset_current_suspended()
+{
+    _current_suspended = _suspended;
+}
+
 CPU::Context * Thread::context()
 {
     db<Thread>(TRC) << "Acessando contexto da Thread.\n";
@@ -180,7 +185,7 @@ void Thread::thread_exit (int exit_code)
     while (!_suspended->empty())
     {
         Thread * thread_to_be_resumed = _suspended->remove_head()->object();
-        thread_to_be_resumed->set_current_suspended(_suspended);
+        thread_to_be_resumed->reset_current_suspended();
         thread_to_be_resumed->resume();
     }
 
