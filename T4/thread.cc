@@ -8,19 +8,18 @@ __BEGIN_API
 int Thread::_current_id = 0;
 Thread * Thread::_running = NULL;
 Thread Thread::_main;
+CPU::Context * Thread::_main_context;
 Thread Thread::_dispatcher;
 Thread::Ready_Queue Thread::_ready;
 
 void Thread::init(void (*main)(void *))
 {
     db<Thread>(TRC) << "Thread::init chamado.\n";
-
-    db<Thread>(TRC) << "Criando fila de threads prontas.\n";
-    new(&_ready)Ready_Queue();
     
     db<Thread>(TRC) << "Criando thread main.\n";
     std::string name = "main";
     new(&_main)Thread(main, (void*) name.data());
+    _main_context = _main.context();
     
     db<Thread>(TRC) << "Criando thread dispatcher.\n";
     new(&_dispatcher)Thread(&Thread::dispatcher);
@@ -28,7 +27,7 @@ void Thread::init(void (*main)(void *))
     db<Thread>(TRC) << "Trocando contexto para a thread main.\n";
     _running = &_main;
     _main._state = RUNNING;
-    _main.context()->load();
+    _main_context->load();
 }
 
 void Thread::dispatcher()

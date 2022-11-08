@@ -120,7 +120,7 @@ private:
     static Thread * _running;
     static int _current_id;
     static Thread _main; 
-    static CPU::Context _main_context;
+    static CPU::Context * _main_context;
     static Thread _dispatcher;
     static Ready_Queue _ready;
     
@@ -153,7 +153,8 @@ inline Thread::Thread(void (* entry)(Tn ...), Tn ... an) /* inicialização de _
     _suspended = new Suspended_Queue();
     _current_suspended = _suspended;
 
-    if (_id > 0) {
+    if (_id > 0) 
+    {
         db<Thread>(TRC) << "Inserindo thread na fila.\n";
         _link = new Ready_Queue::Element(this, (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count()));
         _ready.insert(_link); 
