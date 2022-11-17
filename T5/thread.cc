@@ -120,8 +120,8 @@ void Thread::resume()
         {
         	int now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
         	_link->rank(now);
-        	_ready.insert(_link);
         }
+        _ready.insert(_link);
         delete _suspended_link;
     }
     db<Thread>(TRC) << "Thread::resume finalizado. \n";
@@ -176,7 +176,7 @@ CPU::Context * Thread::context()
     return _context;
 }
 
-void Thread::thread_exit (int exit_code)
+void Thread::thread_exit(int exit_code)
 {
     db<Thread>(TRC) << "Thread::thread_exit chamado.\n";
     _state = FINISHING;
@@ -196,6 +196,45 @@ void Thread::thread_exit (int exit_code)
         db<Thread>(TRC) << "Cedendo a vez à próxima thread.\n";
         yield();
     }
+}
+
+void Thread::sleep()
+{
+    db<Thread>(TRC) << "Thread::sleep chamado.\n";
+    _state = WAITING;
+    
+    db<Thread>(TRC) << "Thread::sleep finalizado. Chamando yield.\n";
+    yield();
+}
+
+void Thread::wakeup()
+{
+    db<Thread>(TRC) << "Thread::wakeup chamado.\n";
+    _state = READY;
+    delete _waiting_link;
+
+    if (this != &_main)
+    {
+        db<Thread>(TRC) << "Alterando prioridade da thread.\n";
+        int now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+        _link->rank(now);
+    }
+    db<Thread>(TRC) << "Reinserindo thread na fila de prontas.\n";
+    _ready.insert(_link);
+
+    db<Thread>(TRC) << "Thread::wakeup finalizado. Chamando yield.\n";
+    yield();
+}
+
+Thread::Waiting_Queue::Element * Thread::set_waiting_link()
+{
+    db<Thread>(TRC) << "Thread::set_waiting_link chamado.\n";
+
+    db<Thread>(TRC) << "Criando waiting_link.\n";
+    _waiting_link = new Thread::Waiting_Queue::Element(this, (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count()));
+    
+    db<Thread>(TRC) << "Thread::set_waiting_link finalizado.\n";
+    return _waiting_link;
 }
 
 Thread::~Thread()

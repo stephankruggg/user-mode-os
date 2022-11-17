@@ -11,6 +11,9 @@ __BEGIN_API
 class Semaphore
 {
 public:
+
+    typedef Ordered_List<Thread> Waiting_Queue;
+
     Semaphore(int v = 1);
     ~Semaphore();
 
@@ -27,10 +30,10 @@ private:
     void wakeup_all();
 
 private:
-    //DECLARAÇÃO DOS ATRIBUTOS DO SEMÁFORO
+    int _sem_value;
+    Waiting_Queue * _waiting;
 };
 
 __END_API
 
 #endif
-

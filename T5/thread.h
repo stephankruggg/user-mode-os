@@ -18,12 +18,14 @@ public:
 
     typedef Ordered_List<Thread> Ready_Queue;
     typedef Ordered_List<Thread> Suspended_Queue;
+    typedef Ordered_List<Thread> Waiting_Queue;
 
     // Thread State
     enum State {
         RUNNING,
         READY,
         SUSPENDED,
+        WAITING,
         FINISHING
     };
 
@@ -117,6 +119,21 @@ public:
     void reset_current_suspended();
 
     /*
+     * Adormece uma thread.
+     */
+    void sleep();
+
+    /*
+     * Acorda uma thread.
+     */
+    void wakeup();
+
+    /*
+     * Cria um waiting link para a thread e o retorna.
+     */
+    Waiting_Queue::Element * set_waiting_link();
+
+    /*
      * Destrutor de uma thread. Realiza todo os procedimentos para manter a consistência da classe.
      */ 
     ~Thread();
@@ -136,6 +153,7 @@ private:
     Suspended_Queue * _current_suspended;
     Ready_Queue::Element * _link;
     Suspended_Queue::Element * _suspended_link;
+    Waiting_Queue::Element * _waiting_link;
     
     volatile State _state;
 
@@ -158,10 +176,11 @@ inline Thread::Thread(void (* entry)(Tn ...), Tn ... an) /* inicialização de _
     _suspended = new Suspended_Queue();
     _current_suspended = _suspended;
 
+    _link = new Ready_Queue::Element(this, (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count()));
+
     if (_id > 0) 
     {
         db<Thread>(TRC) << "Inserindo thread na fila.\n";
-        _link = new Ready_Queue::Element(this, (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count()));
         _ready.insert(_link); 
     }
 }
