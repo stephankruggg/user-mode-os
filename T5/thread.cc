@@ -80,7 +80,7 @@ void Thread::yield()
 int Thread::join()
 {
     db<Thread>(TRC) << "Thread::join chamado.\n";
-    if (this != _running && !_ready.empty())
+    if (this != _running && !_ready.empty() && _state != FINISHING)
     {
         _running->set_current_suspended(this->_suspended);
         _running->suspend();
@@ -184,7 +184,7 @@ void Thread::thread_exit(int exit_code)
 
     while (!_suspended->empty())
     {
-        Thread * thread_to_be_resumed = _suspended->remove_head()->object();
+        Thread * thread_to_be_resumed = _suspended->remove_tail()->object();
         thread_to_be_resumed->reset_current_suspended();
         thread_to_be_resumed->resume();
     }
