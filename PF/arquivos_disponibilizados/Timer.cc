@@ -17,13 +17,12 @@ Timer::Timer(int fps) : _timer(NULL), _fps(fps) {
 Timer::~Timer() {
    if (_timer != NULL) {
       al_destroy_timer(_timer);
-      //std::cout << "timer deleted\n";      
    }
 }
 
 void Timer::create() {
    if ((_timer = al_create_timer(1.0 / _fps)) == NULL) {
-      std::cout << "error, timer could not be created\n";
+      std::cout << "Unable to create timer. Exiting.\n";
       exit(1);
    }
 }

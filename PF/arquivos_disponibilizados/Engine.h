@@ -12,9 +12,11 @@
 #include <memory>
 #include <string>
 
-#include "Sprite.h"
-#include "Vector.h"
-#include "Action.h"
+#include "Window.h"
+#include "Player.h"
+#include "Input.h"
+#include "Spawner.h"
+#include "CollisionDetector.h"
 
 // forward declarations
 class Menu;
@@ -28,14 +30,9 @@ class Engine {
    
    void init();
    void run();
-   void draw();
    void update(double dt);
 
    void gameLoop(float& prevTime);
-
-   act::action input(ALLEGRO_KEYBOARD_STATE&);
-   void drawShip(std::shared_ptr<Sprite> sprite, int flags);
-   void drawBackground();
 
    inline int getWidth() const {
       return _displayWidth;
@@ -47,32 +44,25 @@ class Engine {
       return _fps;
    }
 
-  private:
+   void checkCollision();
+   void spawn();
+
+  protected:
+   Window * _window;
+   Background * _background;
+   std::vector<NormalEnemy *> _enemies;
+   Player * _player = NULL;
+   Boss * _boss = NULL;
+   Input * _input;
+   Spawner * _spawner;
+   CollisionDetector * _collisionDetector;
+
    void loadSprites();
-   //Checks data of the spaceship
-   void checkBoundary();
-   void selectShipAnimation();
-   std::shared_ptr<Sprite> spaceShip;
-   Point centre;        /**< ship position */
-   ALLEGRO_COLOR color; /**< ship color */   
-   Vector speed;        /**< movement speed in any direction */
-   int row;             /**<row of animation to be played */
-   int col;             /**< column of animation to be played */
 
-   //Background
-   Point bgMid;/**<point used by the background to draw from */
-   Point fgMid;
-   Point fg2Mid;
-   Vector bgSpeed;/**<background movement speed */
-   Vector fgSpeed;
-   std::shared_ptr<Sprite> bg;/**<shared pointer to background animation */
-   std::shared_ptr<Sprite> fg;
-
-   // general game variables
    int _displayWidth;
    int _displayHeight;
    int _fps;
-   // allegro objects
+
    ALLEGRO_TIMER *_timer;
    ALLEGRO_EVENT_QUEUE *_eventQueue;
    ALLEGRO_DISPLAY *_display;
