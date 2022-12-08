@@ -8,6 +8,8 @@
 
 #include "Input.h"
 
+__BEGIN_API
+
 Input::Input(Player * player, ALLEGRO_EVENT_QUEUE * eventQueue) {
   if (!al_install_keyboard()) {
       std::cerr << "Unable to install keyboard. Exiting.\n";
@@ -50,3 +52,5 @@ void Input::checkKeyDown() {
      std::cout << "sair\n";
   }
 }
+
+__END_API

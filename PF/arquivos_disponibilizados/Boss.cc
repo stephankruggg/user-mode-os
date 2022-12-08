@@ -8,6 +8,8 @@
 
 #include "Boss.h"
 
+__BEGIN_API
+
 Boss::Boss(ALLEGRO_COLOR color, int size, int speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, int missileDelay, int laserDelay) : Enemy(color, size, speed, maxLife, position, missileColor, laserColor, missileDelay, laserDelay) {
   _minXPosition = 700;
   _maxYPosition = 475;
@@ -65,3 +67,4 @@ void Boss::loadSprites() {
   _sprite = std::make_shared<Sprite>("bossv2.png");
 }
 
+__END_API

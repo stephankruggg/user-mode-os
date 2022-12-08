@@ -8,6 +8,8 @@
 
 #include "Spawner.h"
 
+__BEGIN_API
+
 Spawner::Spawner() {
   _playerSize = 40;
   _playerPosition = Point(200, 300);
@@ -70,3 +72,5 @@ std::vector<NormalEnemy*> Spawner::spawnNormalEnemies() {
 
   return normalEnemies;
 }
+
+__END_API

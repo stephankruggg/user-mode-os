@@ -12,10 +12,13 @@
 #define BOSS_H
 
 #include "Enemy.h"
+#include "traits.h"
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <memory>
+
+__BEGIN_API
 
 class Boss : public Enemy {
 
@@ -39,4 +42,7 @@ class Boss : public Enemy {
     int _spriteIndex;
 
 };
+
+__END_API
+
 #endif

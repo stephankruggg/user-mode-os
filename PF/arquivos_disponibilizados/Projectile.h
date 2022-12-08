@@ -13,6 +13,9 @@
 #include "Sprite.h"
 #include "Point.h"
 #include "Vector.h"
+#include "traits.h"
+
+__BEGIN_API
 
 class Projectile {
 
@@ -38,5 +41,7 @@ class Projectile {
     Vector _movement;
 
 };
+
+__END_API
 
 #endif

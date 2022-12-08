@@ -16,6 +16,9 @@
 #include "Timer.h"
 #include <iostream>
 #include <memory>
+#include "traits.h"
+
+__BEGIN_API
 
 class Spaceship {
 
@@ -85,5 +88,7 @@ class Spaceship {
     Vector _missileMovement;
     Vector _laserMovement;
 };
+
+__END_API
 
 #endif

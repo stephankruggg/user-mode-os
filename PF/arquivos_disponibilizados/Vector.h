@@ -10,6 +10,10 @@
 #ifndef _VECTOR_H
 #define _VECTOR_H
 
+#include "traits.h"
+
+__BEGIN_API
+
 /**
  * @struct Vector
  * @brief represents the change in position of x and y
@@ -48,5 +52,7 @@ struct Vector {
    void Angle(Point p, Point p2, double time);
    
 };
+
+__END_API
 
 #endif

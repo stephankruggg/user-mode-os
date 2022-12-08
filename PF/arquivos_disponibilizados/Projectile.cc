@@ -8,6 +8,8 @@
 
 #include "Projectile.h"
 
+__BEGIN_API
+
 Projectile::Projectile(Point center, ALLEGRO_COLOR color, Vector movement) {
   _center = center;
   _movement = movement;
@@ -25,3 +27,5 @@ Point Projectile::get_center() {
 int Projectile::get_size() {
   return _size;
 }
+
+__END_API

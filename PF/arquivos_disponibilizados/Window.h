@@ -13,6 +13,9 @@
 #include "Spaceship.h"
 #include "Projectile.h"
 #include "Background.h"
+#include "traits.h"
+
+__BEGIN_API
 
 class Window {
 
@@ -41,5 +44,7 @@ class Window {
 
     std::vector<Spaceship *> _spaceships;
 };
+
+__END_API
 
 #endif

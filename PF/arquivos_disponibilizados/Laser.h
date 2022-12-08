@@ -15,6 +15,9 @@
 #include "Point.h"
 #include "Vector.h"
 #include "Projectile.h"
+#include "traits.h"
+
+__BEGIN_API
 
 class Laser : public Projectile {
   public:
@@ -30,5 +33,7 @@ class Laser : public Projectile {
   int _angle;
 
 };
+
+__END_API
 
 #endif

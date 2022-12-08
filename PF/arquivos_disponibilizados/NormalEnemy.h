@@ -10,6 +10,9 @@
 
 #include "Enemy.h"
 #include "Direction.h"
+#include "traits.h"
+
+__BEGIN_API
 
 class NormalEnemy : public Enemy {
 
@@ -25,5 +28,7 @@ class NormalEnemy : public Enemy {
     void loadSprites();
 
 };
+
+__END_API
 
 #endif

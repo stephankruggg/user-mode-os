@@ -8,6 +8,8 @@
 
 #include "Player.h"
 
+__BEGIN_API
+
 Player::Player(int size, int speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, int missileDelay, int laserDelay) : Spaceship(size, speed, maxLife, position, missileColor, laserColor, missileDelay, laserDelay) {
   _missileMovement = Vector(500, 0);
   _laserMovement = Vector(500, 0);
@@ -74,3 +76,5 @@ void Player::shootM() {
 void Player::shootL() {
   shootLasers({0}, {_laserMovement});
 }
+
+__END_API

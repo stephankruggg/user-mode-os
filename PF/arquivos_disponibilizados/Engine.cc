@@ -11,7 +11,29 @@
 
 #include "Timer.h"
 
-Engine::Engine(int w, int h, int fps) : _displayWidth(w), _displayHeight(h), _fps(fps), _timer(NULL), _eventQueue(NULL), _finish(false) {  }
+__BEGIN_API
+
+Window * Engine::_window;
+Background * Engine::_background;
+std::vector<NormalEnemy *> Engine::_enemies;
+Player * Engine::_player = NULL;
+Boss * Engine::_boss = NULL;
+Input * Engine::_input;
+Spawner * Engine::_spawner;
+CollisionDetector * Engine::_collisionDetector;
+ALLEGRO_EVENT_QUEUE * Engine::_eventQueue = NULL;
+bool Engine::_finish = false;
+ALLEGRO_TIMER * Engine::_timer = NULL;
+int Engine::_fps = 60;
+int Engine::_displayHeight = 600;
+int Engine::_displayWidth = 800;
+ALLEGRO_DISPLAY * Engine::_display;
+float Engine::_prevTime = 0;
+float Engine::_dt = 0;
+float Engine::_crtTime = 0;
+bool Engine::_redraw = true;
+
+Engine::Engine() {  }
 
 Engine::~Engine() {
    if (_timer != NULL) al_destroy_timer(_timer);
@@ -19,7 +41,15 @@ Engine::~Engine() {
    if (_display != NULL) al_destroy_display(_display);
 }
 
-void Engine::init() {
+void Engine::init(void * name) {
+   new Thread(run);
+   new Thread(draw);
+   new Thread(spawn);
+   new Thread(input);
+   new Thread(collision);
+   new Thread(player);
+   new Thread(boss);
+
    al_init();
 
    al_init_primitives_addon();
@@ -43,7 +73,6 @@ void Engine::init() {
    _background = new Background();
    _window->addBackground(_background);
    _spawner = new Spawner();
-
    _player = _spawner->spawnPlayer();
    _window->addSpaceship(_player);
    _collisionDetector->addPlayer(_player);
@@ -54,55 +83,35 @@ void Engine::init() {
    al_start_timer(_timer);
 
    loadSprites();
+
+   run();
 }
 
 
 void Engine::run() {
-   float prevTime = 0;
-
    while (!_finish) {
-      gameLoop(prevTime);
-   }
-}
+      ALLEGRO_EVENT event;
 
-void Engine::gameLoop(float& prevTime) {
-   ALLEGRO_EVENT event;
+      al_wait_for_event(_eventQueue, &event);
 
-   bool redraw = true;
-   float crtTime;
-   
-   _input->checkKeyDown();
+      if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+         _finish = true;
+         return;
+      }
 
-   al_wait_for_event(_eventQueue, &event);
+      if (event.type == ALLEGRO_EVENT_TIMER) {
+         _crtTime = al_current_time();
+         _dt = _crtTime - _prevTime;
+         update(_dt);
+         _redraw = true;
+         _prevTime = _crtTime;
+      }
 
-   if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
-      _finish = true;
-      return;
-   }
-
-   if (event.type == ALLEGRO_EVENT_TIMER) {
-      spawn();
-
-      crtTime = al_current_time();
-      update(crtTime - prevTime);
-      prevTime = crtTime;
-      redraw = true;
-
-      checkCollision();
-   }
-
-   if (redraw && al_is_event_queue_empty(_eventQueue)) {
-      redraw = false;
-      _window->draw();
-      al_flip_display();
+      Thread::yield();
    }
 }
 
 void Engine::update(double dt) {
-   if (_player) _player->update(dt);
-
-   if (_boss) _boss->run(dt);
-
    for (auto enemy = _enemies.begin(); enemy != _enemies.end(); ++enemy) {
       (*enemy)->run(dt);
    }
@@ -115,27 +124,67 @@ void Engine::loadSprites()
    _window->loadSprites();
 }
 
-void Engine::checkCollision() {
-   _collisionDetector->checkEnemyCollision();
-   _collisionDetector->checkPlayerCollision();
-   _collisionDetector->checkAllBoundaryCollision();
+void Engine::collision() {
+   while (!_finish) {
+      _collisionDetector->checkEnemyCollision();
+      _collisionDetector->checkPlayerCollision();
+      _collisionDetector->checkAllBoundaryCollision();
+      Thread::yield();
+   }
+}
+
+void Engine::draw() {
+   while (!_finish) {
+      if (_redraw) {
+         _window->draw();
+         _redraw = false;
+         al_flip_display();
+      }
+      Thread::yield();
+   }
+}
+
+void Engine::input() {
+   while (!_finish) {
+      _input->checkKeyDown();
+      Thread::yield();
+   }
 }
 
 void Engine::spawn() {
-   if (!_boss) {
-      _boss = _spawner->spawnBoss();
-      if (_boss) {
-         _window->addSpaceship(_boss);
-         _collisionDetector->addEnemy(_boss);
+   while (!_finish) {
+      if (!_boss) {
+         _boss = _spawner->spawnBoss();
+         if (_boss) {
+            _window->addSpaceship(_boss);
+            _collisionDetector->addEnemy(_boss);
+         }
       }
-   }
 
-   std::vector<NormalEnemy*> enemies = _spawner->spawnNormalEnemies();
-   if (enemies.size() > 0) {
-      for (std::vector<NormalEnemy *>::iterator enemy = enemies.begin(); enemy != enemies.end(); ++enemy) {
-         _enemies.push_back(*enemy);
-         _window->addSpaceship(*enemy);
-         _collisionDetector->addEnemy(*enemy);
+      std::vector<NormalEnemy*> enemies = _spawner->spawnNormalEnemies();
+      if (enemies.size() > 0) {
+         for (std::vector<NormalEnemy *>::iterator enemy = enemies.begin(); enemy != enemies.end(); ++enemy) {
+            _enemies.push_back(*enemy);
+            _window->addSpaceship(*enemy);
+            _collisionDetector->addEnemy(*enemy);
+         }
       }
+      Thread::yield();
    }
 }
+
+void Engine::player() {
+   while (!_finish) {
+      if (_player) _player->update(_dt);
+      Thread::yield();
+   }
+}
+
+void Engine::boss() {
+   while (!_finish) {
+      if (_boss) _boss->run(_dt);
+      Thread::yield();
+   }
+}
+
+__END_API

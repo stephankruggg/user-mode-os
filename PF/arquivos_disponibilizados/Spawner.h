@@ -13,6 +13,9 @@
 #include "Player.h"
 #include "Timer.h"
 #include <vector>
+#include "traits.h"
+
+__BEGIN_API
 
 class Spawner {
 
@@ -61,5 +64,7 @@ class Spawner {
     std::shared_ptr<Timer> _timer;
     bool _respawn;
 };
+
+__END_API
 
 #endif

@@ -8,6 +8,8 @@
 
 #include "Window.h"
 
+__BEGIN_API
+
 Window::Window(ALLEGRO_EVENT_QUEUE * eventQueue) {
   _displayHeight = 600;
   _displayWidth = 800;
@@ -83,3 +85,5 @@ void Window::removeSpaceship(Spaceship * spaceship) {
 void Window::removeBackground() {
   _background = NULL;
 }
+
+__END_API

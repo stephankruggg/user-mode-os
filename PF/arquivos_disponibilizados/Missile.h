@@ -18,6 +18,9 @@
 #include "Vector.h"
 #include "Projectile.h"
 #include "Sprite.h"
+#include "traits.h"
+
+__BEGIN_API
 
 class Missile : public Projectile {   
   public:
@@ -38,5 +41,7 @@ class Missile : public Projectile {
     std::vector<char *> _sprite_names;
    
 };
+
+__END_API
 
 #endif

@@ -17,22 +17,22 @@
 #include "Input.h"
 #include "Spawner.h"
 #include "CollisionDetector.h"
+#include "thread.h"
+#include "cpu.h"
+#include "traits.h"
+#include "semaphore.h"
 
-// forward declarations
-class Menu;
-class Root;
+__BEGIN_API
 
 class Engine {
       
   public:
-   Engine(int w, int h, int fps);
+   Engine();
    ~Engine();
    
-   void init();
-   void run();
-   void update(double dt);
-
-   void gameLoop(float& prevTime);
+   static void init(void * name);
+   static void run();
+   static void update(double dt);
 
    inline int getWidth() const {
       return _displayWidth;
@@ -44,35 +44,41 @@ class Engine {
       return _fps;
    }
 
-   void checkCollision();
-   void spawn();
+   static void collision();
+   static void spawn();
+   static void draw();
+   static void input();
+   static void player();
+   static void boss();
 
   protected:
-   Window * _window;
-   Background * _background;
-   std::vector<NormalEnemy *> _enemies;
-   Player * _player = NULL;
-   Boss * _boss = NULL;
-   Input * _input;
-   Spawner * _spawner;
-   CollisionDetector * _collisionDetector;
+   static Window * _window;
+   static Background * _background;
+   static std::vector<NormalEnemy *> _enemies;
+   static Player * _player;
+   static Boss * _boss;
+   static Input * _input;
+   static Spawner * _spawner;
+   static CollisionDetector * _collisionDetector;
 
-   void loadSprites();
+   static void loadSprites();
 
-   int _displayWidth;
-   int _displayHeight;
-   int _fps;
+   static int _displayWidth;
+   static int _displayHeight;
+   static int _fps;
 
-   ALLEGRO_TIMER *_timer;
-   ALLEGRO_EVENT_QUEUE *_eventQueue;
-   ALLEGRO_DISPLAY *_display;
+   static ALLEGRO_TIMER *_timer;
+   static ALLEGRO_EVENT_QUEUE *_eventQueue;
+   static ALLEGRO_DISPLAY *_display;
 
-   bool _finish;
-   
+   static bool _finish;
+   static float _prevTime;
+   static float _dt;
+   static float _crtTime;
+   static bool _redraw;
+
 };
 
-
-
-
+__END_API
 
 #endif

@@ -8,6 +8,8 @@
 
 #include "Background.h"
 
+__BEGIN_API
+
 Background::Background() {
   _bgPoint = Point(0, 0);
   _bgMovement = Vector(50, 0);
@@ -29,3 +31,5 @@ void Background::update(double dt) {
     _bgPoint.x = 0;
   }
 }
+
+__END_API

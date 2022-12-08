@@ -8,6 +8,8 @@
 
 #include <allegro5/allegro_primitives.h>
 
+__BEGIN_API
+
 Laser::Laser(Point center, ALLEGRO_COLOR color, Vector movement, double angle) : Projectile(center, color, movement)
 {
   _size = -0.05;
@@ -32,3 +34,5 @@ void Laser::loadAssets() {
 
 void Laser::hit() {
 }
+
+__END_API

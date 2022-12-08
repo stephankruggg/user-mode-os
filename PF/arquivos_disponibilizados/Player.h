@@ -12,6 +12,9 @@
 #include <allegro5/allegro_primitives.h>
 #include "Spaceship.h"
 #include "Direction.h"
+#include "traits.h"
+
+__BEGIN_API
 
 class Player : public Spaceship {
 
@@ -31,5 +34,7 @@ class Player : public Spaceship {
     void loadSprites();
 
 };
+
+__END_API
 
 #endif

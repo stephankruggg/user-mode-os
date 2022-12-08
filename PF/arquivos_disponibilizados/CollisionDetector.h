@@ -8,13 +8,15 @@
 #ifndef COLLISIONDETECTOR_H
 #define COLLISIONDETECTOR_H
 
-
 #include "Spaceship.h"
 #include "Projectile.h"
 #include "Enemy.h"
 #include "Player.h"
 #include "Direction.h"
+#include "traits.h"
 #include <vector>
+
+__BEGIN_API
 
 class CollisionDetector {
 
@@ -42,5 +44,7 @@ class CollisionDetector {
     int _height;
 
 };
+
+__END_API
 
 #endif

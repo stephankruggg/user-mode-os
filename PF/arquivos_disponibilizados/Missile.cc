@@ -10,6 +10,7 @@
 #include <cmath>
 #include "Sprite.h"
 
+__BEGIN_API
 
 Missile::Missile(Point p, ALLEGRO_COLOR c, Vector s, double angle) : Projectile(p, c, s)
 {
@@ -42,3 +43,5 @@ void Missile::draw() {
 
   if (_sprite_number == _sprite_list.size()) _sprite_number = 0;
 }
+
+__END_API

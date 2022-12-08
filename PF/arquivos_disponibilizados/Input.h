@@ -14,6 +14,9 @@
 #include <map>
 #include <iostream>
 #include <functional>
+#include "traits.h"
+
+__BEGIN_API
 
 class Input {
 
@@ -29,5 +32,7 @@ class Input {
     Player * _player;
 
 };
+
+__END_API
 
 #endif

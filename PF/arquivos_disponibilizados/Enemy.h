@@ -11,6 +11,9 @@
 #include "Spaceship.h"
 #include "Timer.h"
 #include "Direction.h"
+#include "traits.h"
+
+__BEGIN_API
 
 class Enemy : public Spaceship {
 
@@ -35,5 +38,7 @@ class Enemy : public Spaceship {
     int _fireSpeed;
 
 };
+
+__END_API
 
 #endif

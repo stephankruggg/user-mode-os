@@ -8,6 +8,8 @@
 
 #include "CollisionDetector.h"
 
+__BEGIN_API
+
 CollisionDetector::CollisionDetector() {
   _width = 800;
   _height = 600;
@@ -172,3 +174,5 @@ dir::direction CollisionDetector::checkBoundaryCollision(Point center, int size)
 
   return dir::NONE;
 }
+
+__END_API

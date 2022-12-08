@@ -12,6 +12,9 @@
 #include "Sprite.h"
 #include "Point.h"
 #include "Vector.h"
+#include "traits.h"
+
+__BEGIN_API
 
 class Background {
 
@@ -33,5 +36,7 @@ class Background {
     Vector _bgMovement;
 
 };
+
+__END_API
 
 #endif

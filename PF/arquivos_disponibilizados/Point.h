@@ -16,6 +16,10 @@
 #include <ctime>
 #include <cstdlib>
 
+#include "traits.h"
+
+__BEGIN_API
+
 struct Vector;
 
 /**
@@ -62,5 +66,7 @@ struct Point {
    void rollRandomY();
    
 };
+
+__END_API
 
 #endif
