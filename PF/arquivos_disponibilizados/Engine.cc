@@ -174,7 +174,7 @@ void Engine::spawn() {
       }
 
       if (!_boss) {
-         _boss = _spawner->spawnBoss();
+         _boss = _spawner->spawnBoss(_player);
          if (_boss) {
             _window->addSpaceship(_boss);
             _collisionDetector->addEnemy(_boss);

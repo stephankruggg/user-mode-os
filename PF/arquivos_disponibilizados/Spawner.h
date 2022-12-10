@@ -26,7 +26,7 @@ class Spawner {
 
     Player * spawnPlayer();
 
-    Boss * spawnBoss();
+    Boss * spawnBoss(Player * player);
     std::vector<NormalEnemy*> spawnNormalEnemies();
     Mine * spawnMine();
 

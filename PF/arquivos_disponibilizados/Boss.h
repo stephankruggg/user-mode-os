@@ -12,6 +12,7 @@
 #define BOSS_H
 
 #include "Enemy.h"
+#include "Player.h"
 #include "traits.h"
 
 #include <allegro5/allegro.h>
@@ -23,7 +24,7 @@ __BEGIN_API
 class Boss : public Enemy {
 
   public:
-    Boss (ALLEGRO_COLOR color, int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay);
+    Boss (ALLEGRO_COLOR color, int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay, Player * player);
     ~Boss() {  };
     
     void move();
@@ -38,6 +39,7 @@ class Boss : public Enemy {
     int _maxYPosition;
     int _minYPosition;
     int _minXPosition;
+    Player * _player;
 
     int _spriteIndex;
 

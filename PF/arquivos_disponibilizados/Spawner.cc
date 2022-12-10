@@ -27,8 +27,8 @@ Spawner::Spawner() {
   _bossPosition = Point(850, 300);
   _bossMissileColor = al_map_rgb(155, 0, 0);
   _bossLaserColor = al_map_rgb(155, 0, 0);
-  _bossMissileDelay = 3;
-  _bossLaserDelay = 2;
+  _bossMissileDelay = 1;
+  _bossLaserDelay = 6;
 
   _normalEnemyColor = al_map_rgb(246, 64, 234);
   _normalEnemySize = 40;
@@ -62,11 +62,11 @@ Player * Spawner::spawnPlayer() {
   return new Player(_playerSize, _playerSpeed, _playerMaxLife, _playerPosition, _playerMissileColor, _playerLaserColor, _playerMissileDelay, _playerLaserDelay);
 }
 
-Boss * Spawner::spawnBoss() {
+Boss * Spawner::spawnBoss(Player * player) {
   if (_timer->getCount() == 60) {
     _respawn = false;
     _timer->resetCount();
-    return new Boss(_bossColor, _bossSize, _bossSpeed, _bossMaxLife, _bossPosition, _bossMissileColor, _bossLaserColor, _bossMissileDelay, _bossLaserDelay);
+    return new Boss(_bossColor, _bossSize, _bossSpeed, _bossMaxLife, _bossPosition, _bossMissileColor, _bossLaserColor, _bossMissileDelay, _bossLaserDelay, player);
   }
 }
 

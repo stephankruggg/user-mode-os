@@ -159,4 +159,8 @@ void Spaceship::missileCollision(Missile * missile) {
   }
 }
 
+Point Spaceship::getPosition() {
+  return _center;
+}
+
 __END_API

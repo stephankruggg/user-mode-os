@@ -59,6 +59,8 @@ class Spaceship {
     void updateMissiles(double dt);
     void resetTimers();
 
+    Point getPosition();
+
   protected:
     int _maxLife;
     int _life;
