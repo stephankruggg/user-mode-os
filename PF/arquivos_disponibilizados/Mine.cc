@@ -10,7 +10,7 @@
 
 __BEGIN_API
 
-Mine::Mine(ALLEGRO_COLOR color, int size, int speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, int missileDelay, int laserDelay) : Enemy(color, size, speed, maxLife, position, missileColor, laserColor, missileDelay, laserDelay) {
+Mine::Mine(ALLEGRO_COLOR color, int size, int speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay) : Enemy(color, size, speed, maxLife, position, missileColor, laserColor, missileDelay, laserDelay) {
   _deathAnimationFrame = 0;
   loadSprites();
   move();

@@ -27,8 +27,8 @@ Spawner::Spawner() {
   _bossPosition = Point(850, 300);
   _bossMissileColor = al_map_rgb(155, 0, 0);
   _bossLaserColor = al_map_rgb(155, 0, 0);
-  _bossMissileDelay = 2;
-  _bossLaserDelay = 4;
+  _bossMissileDelay = 3;
+  _bossLaserDelay = 2;
 
   _normalEnemyColor = al_map_rgb(246, 64, 234);
   _normalEnemySize = 40;
@@ -38,7 +38,7 @@ Spawner::Spawner() {
   _normalEnemyPosition = {Point(800, 300), Point(900, 350), Point(900, 250), Point(1000, 400), Point(1000, 200), Point(1100, 450), Point(1100, 150)};
   _normalEnemyMissileColor = al_map_rgb(0, 0, 155);
   _normalEnemyLaserColor = al_map_rgb(0, 0, 155);
-  _normalEnemyLaserDelay = 4;
+  _normalEnemyLaserDelay = 6;
   _normalEnemyMissileDelay = 3;
 
   _mineColor = al_map_rgb(0, 0, 155);

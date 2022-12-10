@@ -16,7 +16,7 @@ __BEGIN_API
 class Mine : public Enemy {
 
   public:
-    Mine(ALLEGRO_COLOR _color, int size, int speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, int missileDelay, int laserDelay);
+    Mine(ALLEGRO_COLOR _color, int size, int speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay);
     ~Mine() {  };
 
     void boundaryCollision(dir::direction direction) {  };

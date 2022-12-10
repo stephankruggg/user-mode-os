@@ -37,8 +37,8 @@ class Spawner {
     int _playerMaxLife;
     ALLEGRO_COLOR _playerMissileColor;
     ALLEGRO_COLOR _playerLaserColor;
-    int _playerMissileDelay;
-    int _playerLaserDelay;
+    double _playerMissileDelay;
+    double _playerLaserDelay;
 
     Point _bossPosition;
     int _bossSize;
@@ -47,8 +47,8 @@ class Spawner {
     int _bossMaxLife;
     ALLEGRO_COLOR _bossMissileColor;
     ALLEGRO_COLOR _bossLaserColor;
-    int _bossMissileDelay;
-    int _bossLaserDelay;
+    double _bossMissileDelay;
+    double _bossLaserDelay;
 
     int _normalEnemyNumber;
     std::vector<Point> _normalEnemyPosition;
@@ -58,8 +58,8 @@ class Spawner {
     int _normalEnemyMaxLife;
     ALLEGRO_COLOR _normalEnemyMissileColor;
     ALLEGRO_COLOR _normalEnemyLaserColor;
-    int _normalEnemyMissileDelay;
-    int _normalEnemyLaserDelay;
+    double _normalEnemyMissileDelay;
+    double _normalEnemyLaserDelay;
 
     Point _minePosition;
     int _mineSize;
@@ -68,8 +68,8 @@ class Spawner {
     int _mineMaxLife;
     ALLEGRO_COLOR _mineMissileColor;
     ALLEGRO_COLOR _mineLaserColor;
-    int _mineMissileDelay;
-    int _mineLaserDelay;
+    double _mineMissileDelay;
+    double _mineLaserDelay;
     
     std::shared_ptr<Timer> _timer;
     bool _respawn;

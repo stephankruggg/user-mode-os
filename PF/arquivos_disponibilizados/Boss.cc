@@ -10,7 +10,7 @@
 
 __BEGIN_API
 
-Boss::Boss(ALLEGRO_COLOR color, int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, int missileDelay, int laserDelay) : Enemy(color, size, speed, maxLife, position, missileColor, laserColor, missileDelay, laserDelay) {
+Boss::Boss(ALLEGRO_COLOR color, int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay) : Enemy(color, size, speed, maxLife, position, missileColor, laserColor, missileDelay, laserDelay) {
   _minXPosition = 700;
   _maxYPosition = 475;
   _minYPosition = 150;
