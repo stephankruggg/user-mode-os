@@ -11,7 +11,7 @@
 __BEGIN_API
 
 Spawner::Spawner() {
-  _playerSize = 40;
+  _playerSize = 50;
   _playerPosition = Point(200, 300);
   _playerSpeed = 250;
   _playerMaxLife = 30;

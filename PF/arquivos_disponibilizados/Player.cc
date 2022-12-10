@@ -55,16 +55,16 @@ void Player::boundaryCollision(dir::direction direction) {
   reset_movement();
   switch (direction) {
     case dir::UP:
-      _center.y = 0 + _size - 20;
+      _center.y = _size / 2 + 1;
       break;
     case dir::DOWN:
-      _center.y = 600 - _size + 20;
+      _center.y = 600 - _size / 2 - 1;
       break;
     case dir::LEFT:
-      _center.x = _size - 20;
+      _center.x = _size / 2 + 1;
       break;
     case dir::RIGHT:
-      _center.x = 800 - _size + 20;
+      _center.x = 800 - _size / 2 - 1;
       break;
   }
 }
