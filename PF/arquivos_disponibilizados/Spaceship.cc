@@ -10,7 +10,7 @@
 
 __BEGIN_API
 
-Spaceship::Spaceship(int size, int speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, int missileDelay, int laserDelay) {
+Spaceship::Spaceship(int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, int missileDelay, int laserDelay) {
   reset_movement();
   _center = position;
   _size = size;

@@ -11,6 +11,7 @@
 #include "Boss.h"
 #include "NormalEnemy.h"
 #include "Player.h"
+#include "Mine.h"
 #include "Timer.h"
 #include <vector>
 #include "traits.h"
@@ -27,13 +28,12 @@ class Spawner {
 
     Boss * spawnBoss();
     std::vector<NormalEnemy*> spawnNormalEnemies();
-
-    void spawnMine();
+    Mine * spawnMine();
 
   protected:
     Point _playerPosition;
     int _playerSize;
-    int _playerSpeed;
+    double _playerSpeed;
     int _playerMaxLife;
     ALLEGRO_COLOR _playerMissileColor;
     ALLEGRO_COLOR _playerLaserColor;
@@ -43,7 +43,7 @@ class Spawner {
     Point _bossPosition;
     int _bossSize;
     ALLEGRO_COLOR _bossColor;
-    int _bossSpeed;
+    double _bossSpeed;
     int _bossMaxLife;
     ALLEGRO_COLOR _bossMissileColor;
     ALLEGRO_COLOR _bossLaserColor;
@@ -54,15 +54,26 @@ class Spawner {
     std::vector<Point> _normalEnemyPosition;
     int _normalEnemySize;
     ALLEGRO_COLOR _normalEnemyColor;
-    int _normalEnemySpeed;
+    double _normalEnemySpeed;
     int _normalEnemyMaxLife;
     ALLEGRO_COLOR _normalEnemyMissileColor;
     ALLEGRO_COLOR _normalEnemyLaserColor;
     int _normalEnemyMissileDelay;
     int _normalEnemyLaserDelay;
+
+    Point _minePosition;
+    int _mineSize;
+    ALLEGRO_COLOR _mineColor;
+    double _mineSpeed;
+    int _mineMaxLife;
+    ALLEGRO_COLOR _mineMissileColor;
+    ALLEGRO_COLOR _mineLaserColor;
+    int _mineMissileDelay;
+    int _mineLaserDelay;
     
     std::shared_ptr<Timer> _timer;
     bool _respawn;
+    bool _mineRespawn;
 };
 
 __END_API

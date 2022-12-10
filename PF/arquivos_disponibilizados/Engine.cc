@@ -21,6 +21,7 @@ Boss * Engine::_boss = NULL;
 Input * Engine::_input;
 Spawner * Engine::_spawner;
 CollisionDetector * Engine::_collisionDetector;
+Mine * Engine::_mine = NULL;
 ALLEGRO_EVENT_QUEUE * Engine::_eventQueue = NULL;
 bool Engine::_finish = false;
 ALLEGRO_TIMER * Engine::_timer = NULL;
@@ -116,6 +117,8 @@ void Engine::update(double dt) {
       (*enemy)->run(dt);
    }
 
+   if (_mine) _mine->run(dt);
+
    _background->update(dt);
 }
 
@@ -153,14 +156,6 @@ void Engine::input() {
 
 void Engine::spawn() {
    while (!_finish) {
-      if (!_boss) {
-         _boss = _spawner->spawnBoss();
-         if (_boss) {
-            _window->addSpaceship(_boss);
-            _collisionDetector->addEnemy(_boss);
-         }
-      }
-
       std::vector<NormalEnemy*> enemies = _spawner->spawnNormalEnemies();
       if (enemies.size() > 0) {
          for (std::vector<NormalEnemy *>::iterator enemy = enemies.begin(); enemy != enemies.end(); ++enemy) {
@@ -169,6 +164,23 @@ void Engine::spawn() {
             _collisionDetector->addEnemy(*enemy);
          }
       }
+
+      if (!_mine) {
+         _mine = _spawner->spawnMine();
+         if (_mine) {
+            _window->addSpaceship(_mine);
+            _collisionDetector->addEnemy(_mine);
+         }
+      }
+
+      if (!_boss) {
+         _boss = _spawner->spawnBoss();
+         if (_boss) {
+            _window->addSpaceship(_boss);
+            _collisionDetector->addEnemy(_boss);
+         }
+      }
+
       Thread::yield();
    }
 }

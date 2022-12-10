@@ -60,6 +60,7 @@ class Engine {
    static Input * _input;
    static Spawner * _spawner;
    static CollisionDetector * _collisionDetector;
+   static Mine * _mine;
 
    static void loadSprites();
 

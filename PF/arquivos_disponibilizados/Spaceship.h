@@ -23,7 +23,7 @@ __BEGIN_API
 class Spaceship {
 
   public:
-    Spaceship(int size, int speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, int missileDelay, int laserDelay);
+    Spaceship(int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, int missileDelay, int laserDelay);
     ~Spaceship() {  };
 
     void update(double dt);
@@ -64,7 +64,7 @@ class Spaceship {
     int _life;
     int _size;
 
-    int _speed;
+    double _speed;
     Vector _movement;
     Point _center;
 
