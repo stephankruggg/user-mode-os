@@ -23,7 +23,7 @@ class Input {
     Input(Player * player, ALLEGRO_EVENT_QUEUE * eventQueue);
     ~Input() {  };
 
-    void checkKeyDown();
+    bool checkKeyDown();
 
   protected:
     ALLEGRO_EVENT_QUEUE *_eventQueue;

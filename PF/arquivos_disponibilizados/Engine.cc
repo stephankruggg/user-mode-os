@@ -162,7 +162,8 @@ void Engine::draw() {
 
 void Engine::input() {
    while (!_finish) {
-      _input->checkKeyDown();
+      bool quitGame = _input->checkKeyDown();
+      if (quitGame) _finish = true;
       Thread::yield();
    }
 }

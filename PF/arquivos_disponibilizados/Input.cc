@@ -21,7 +21,7 @@ Input::Input(Player * player, ALLEGRO_EVENT_QUEUE * eventQueue) {
   _player = player;
 }
 
-void Input::checkKeyDown() {
+bool Input::checkKeyDown() {
   al_get_keyboard_state(&_kb);
 
   if (al_key_down(&_kb, ALLEGRO_KEY_UP)) {
@@ -49,8 +49,10 @@ void Input::checkKeyDown() {
   }
 
   if (al_key_down(&_kb, ALLEGRO_KEY_ESCAPE)) {
-     std::cout << "sair\n";
+     return true;
   }
+
+  return false;
 }
 
 __END_API
