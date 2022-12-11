@@ -113,11 +113,24 @@ void Engine::run() {
 }
 
 void Engine::update(double dt) {
+   st::state status;
    for (auto enemy = _enemies.begin(); enemy != _enemies.end(); ++enemy) {
-      (*enemy)->run(dt);
+      status = (*enemy)->run(dt);
+      if (status == st::DEAD) {
+         _collisionDetector->removeEnemy(*enemy);
+         _window->removeSpaceship(*enemy);
+      }
    }
 
-   if (_mine) _mine->run(dt);
+   if (_mine) {
+      status = _mine->run(dt);
+      if (status == st::DEAD) {
+         _collisionDetector->removeEnemy(_mine);
+         _window->removeSpaceship(_mine);
+         delete _mine;
+         _mine = NULL;
+      }
+   }
 
    _background->update(dt);
 }
@@ -159,10 +172,13 @@ void Engine::spawn() {
       std::vector<NormalEnemy*> enemies = _spawner->spawnNormalEnemies();
       if (enemies.size() > 0) {
          for (std::vector<NormalEnemy *>::iterator enemy = enemies.begin(); enemy != enemies.end(); ++enemy) {
-            _enemies.push_back(*enemy);
             _window->addSpaceship(*enemy);
             _collisionDetector->addEnemy(*enemy);
          }
+         for (std::vector<NormalEnemy *>::iterator enemyToRemove = _enemies.begin(); enemyToRemove != _enemies.end(); ++enemyToRemove) {
+            delete (*enemyToRemove);
+         }
+         _enemies = enemies;
       }
 
       if (!_mine) {
@@ -186,15 +202,36 @@ void Engine::spawn() {
 }
 
 void Engine::player() {
+   st::state status;
    while (!_finish) {
-      if (_player) _player->update(_dt);
+      if (_player) {
+         status = _player->run(_dt);
+         if (status == st::DEAD) {
+            _collisionDetector->removePlayer();
+            _window->removeSpaceship(_player);
+            delete _player;
+            delete _input;
+            _input = NULL;
+            _player = NULL;
+            _finish = true;
+         }
+      }
       Thread::yield();
    }
 }
 
 void Engine::boss() {
+   st::state status;
    while (!_finish) {
-      if (_boss) _boss->run(_dt);
+      if (_boss) {
+         status = _boss->run(_dt);
+         if (status == st::DEAD) {
+            _collisionDetector->removeEnemy(_boss);
+            _window->removeSpaceship(_boss);
+            delete _boss;
+            _boss = NULL;
+         }
+      }
       Thread::yield();
    }
 }

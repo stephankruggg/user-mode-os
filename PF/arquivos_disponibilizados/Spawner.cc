@@ -23,7 +23,7 @@ Spawner::Spawner() {
   _bossColor = al_map_rgb(155, 0, 0);
   _bossSize = 400;
   _bossSpeed = 1;
-  _bossMaxLife = 100;
+  _bossMaxLife = 50;
   _bossPosition = Point(850, 300);
   _bossMissileColor = al_map_rgb(155, 0, 0);
   _bossLaserColor = al_map_rgb(155, 0, 0);

@@ -13,6 +13,7 @@ __BEGIN_API
 Player::Player(int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay) : Spaceship(size, speed, maxLife, position, missileColor, laserColor, missileDelay, laserDelay) {
   _missileMovement = Vector(500, 0);
   _laserMovement = Vector(500, 0);
+  _deathAnimationFrame = 0;
 }
 
 void Player::draw() {
@@ -21,7 +22,6 @@ void Player::draw() {
   } else {
     drawDead();
   } 
-  drawLife();
 }
 
 void Player::selectAnimation() {
@@ -38,17 +38,19 @@ void Player::drawLife() {
 		al_map_rgb(255 * (1.0 - _life / _maxLife), 200 * (_life / _maxLife), 0), 5);
 }
 
-void Player::update(double dt) {
+st::state Player::run(double dt) {
   _center = _center + _movement * dt;
   updateLasers(dt);
   updateMissiles(dt);
   resetTimers();
   selectAnimation();
   reset_movement();
+  return _currentState;
 }
 
 void Player::loadSprites() {
   _sprite = std::make_shared<Sprite>("Player.png");
+  _spriteDeath = std::make_shared<Sprite>("explode.png");
 }
 
 void Player::boundaryCollision(dir::direction direction) {

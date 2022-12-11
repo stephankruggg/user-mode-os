@@ -51,6 +51,8 @@ class Engine {
    static void player();
    static void boss();
 
+   static void removeEnemy(NormalEnemy * enemy);
+
   protected:
    static Window * _window;
    static Background * _background;

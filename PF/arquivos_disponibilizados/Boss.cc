@@ -73,6 +73,7 @@ void Boss::chooseFrame() {
 
 void Boss::loadSprites() {
   _sprite = std::make_shared<Sprite>("bossv2.png");
+  _spriteDeath = std::make_shared<Sprite>("explode.png");
 }
 
 __END_API

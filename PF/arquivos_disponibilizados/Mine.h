@@ -22,6 +22,8 @@ class Mine : public Enemy {
     void boundaryCollision(dir::direction direction) {  };
     void move();
     void shoot();
+    void drawDead();
+    void die();
 
     void draw();
     void loadSprites();

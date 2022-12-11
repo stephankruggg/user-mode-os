@@ -20,13 +20,13 @@ class Player : public Spaceship {
 
   public:
     Player(int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay);
-    ~Player();
+    ~Player() {  };
 
     void boundaryCollision(dir::direction direction);
 
     void shootL();
     void shootM();
-    void update(double dt);
+    st::state run(double dt);
 
     void selectAnimation();
     void draw();

@@ -27,7 +27,7 @@ class Enemy : public Spaceship {
     virtual void boundaryCollision(dir::direction direction) {  };
     
     virtual void move() {  };
-    void run(double dt);
+    st::state run(double dt);
 
     virtual void shoot() {  };
 

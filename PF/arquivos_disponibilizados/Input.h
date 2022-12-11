@@ -10,7 +10,6 @@
 
 #include <allegro5/allegro.h>
 #include "Player.h"
-#include "Action.h"
 #include <map>
 #include <iostream>
 #include <functional>
@@ -22,7 +21,7 @@ class Input {
 
   public:
     Input(Player * player, ALLEGRO_EVENT_QUEUE * eventQueue);
-    ~Input();
+    ~Input() {  };
 
     void checkKeyDown();
 

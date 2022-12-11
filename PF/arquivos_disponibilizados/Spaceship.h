@@ -14,6 +14,7 @@
 #include "Missile.h"
 #include "Laser.h"
 #include "Timer.h"
+#include "State.h"
 #include <iostream>
 #include <memory>
 #include "traits.h"
@@ -89,6 +90,9 @@ class Spaceship {
     double _missileDelay;
     Vector _missileMovement;
     Vector _laserMovement;
+
+    st::state _currentState;
+
 };
 
 __END_API

@@ -25,6 +25,7 @@ Spaceship::Spaceship(int size, double speed, int maxLife, Point position, ALLEGR
   _laserTimer = std::make_shared<Timer> (2);
   _missileTimer->create();
   _laserTimer->create();
+  _currentState = st::ALIVE;
 }
 
 void Spaceship::update(double dt) {
@@ -87,7 +88,7 @@ int Spaceship::get_size() {
 }
 
 void Spaceship::die() {
-  std::cout << "delete\n";
+  _currentState = st::DEAD;
 }
 
 void Spaceship::drawDead() {
@@ -132,13 +133,13 @@ void Spaceship::resetTimers() {
 }
 
 void Spaceship::laserCollision(Laser * laser) {
-  std::cout << "remove\n";
   std::vector<Laser*>::iterator iter = _currentLasers.begin();
   while (iter != _currentLasers.end())
   {
     if (*iter == laser)
     {
         iter = _currentLasers.erase(iter);
+        delete laser;
         break;
     }
     iter++;
@@ -146,13 +147,13 @@ void Spaceship::laserCollision(Laser * laser) {
 }
 
 void Spaceship::missileCollision(Missile * missile) {
-  std::cout << "remove\n";
   std::vector<Missile*>::iterator iter = _currentMissiles.begin();
   while (iter != _currentMissiles.end())
   {
     if (*iter == missile)
     {
         iter = _currentMissiles.erase(iter);
+        delete missile;
         break;
     }
     iter++;

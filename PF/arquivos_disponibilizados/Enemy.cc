@@ -18,10 +18,11 @@ Enemy::Enemy(ALLEGRO_COLOR color, int size, double speed, int maxLife, Point pos
   move();
 }
 
-void Enemy::run(double dt) {
+st::state Enemy::run(double dt) {
   move();
   shoot();
   update(dt);
+  return _currentState;
 }
 
 __END_API

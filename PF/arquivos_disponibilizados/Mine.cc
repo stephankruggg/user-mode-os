@@ -55,4 +55,13 @@ void Mine::loadSprites() {
   _spriteDeath = std::make_shared<Sprite>("explode.png");
 }
 
+void Mine::drawDead() {
+  if (_deathAnimationFrame < 5) deathAnimation();
+  else die();
+}
+
+void Mine::die() {
+  if (_timer->getCount() > 10) _currentState = st::DEAD;
+}
+
 __END_API
