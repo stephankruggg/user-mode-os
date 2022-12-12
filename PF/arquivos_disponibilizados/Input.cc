@@ -25,19 +25,19 @@ bool Input::checkKeyDown() {
   al_get_keyboard_state(&_kb);
 
   if (al_key_down(&_kb, ALLEGRO_KEY_UP)) {
-    _player->move_up();
+    _player->moveUp();
   }
 
   if (al_key_down(&_kb, ALLEGRO_KEY_RIGHT)) {
-    _player->move_right();
+    _player->moveRight();
   }
 
   if (al_key_down(&_kb, ALLEGRO_KEY_DOWN)) {
-    _player->move_down();
+    _player->moveDown();
   }
 
   if (al_key_down(&_kb, ALLEGRO_KEY_LEFT)) {
-    _player->move_left();
+    _player->moveLeft();
   }
 
   if (al_key_down(&_kb, ALLEGRO_KEY_1)) {

@@ -24,8 +24,8 @@ Mine::Mine(ALLEGRO_COLOR color, int size, int speed, int maxLife, Point position
 }
 
 void Mine::move() {
-  if (_center.x >= 400) move_left();
-  else reset_movement();
+  if (_center.x >= 400) moveLeft();
+  else resetMovement();
 }
 
 void Mine::shoot() {

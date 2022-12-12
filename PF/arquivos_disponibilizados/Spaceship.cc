@@ -11,7 +11,7 @@
 __BEGIN_API
 
 Spaceship::Spaceship(int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay, double hitDelay) {
-  reset_movement();
+  resetMovement();
   _center = position;
   _size = size;
   _speed = speed;
@@ -38,23 +38,23 @@ void Spaceship::update(double dt) {
   resetTimers();
 }
 
-void Spaceship::reset_movement() {
+void Spaceship::resetMovement() {
   _movement = Vector(0, 0);
 }
 
-void Spaceship::move_down() {
+void Spaceship::moveDown() {
   _movement.y += _speed;
 }
 
-void Spaceship::move_up() {
+void Spaceship::moveUp() {
   _movement.y -= _speed;
 }
 
-void Spaceship::move_right() {
+void Spaceship::moveRight() {
   _movement.x += _speed;
 }
 
-void Spaceship::move_left() {
+void Spaceship::moveLeft() {
   _movement.x -= _speed;
 }
 
@@ -78,18 +78,18 @@ void Spaceship::shootMissiles(std::vector<double> angles, std::vector<Vector> mo
   }
 }
 
-void Spaceship::take_hit() {
+void Spaceship::takeHit() {
   if (!_hitTimer->isRunning()) {
     _hitTimer->startTimer();
     _life--;
   }
 }
 
-Point Spaceship::get_center() {
+Point Spaceship::getCenter() {
   return _center;
 }
 
-int Spaceship::get_size() {
+int Spaceship::getSize() {
   return _size;
 }
 

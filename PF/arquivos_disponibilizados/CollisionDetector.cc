@@ -25,28 +25,28 @@ bool CollisionDetector::checkSpaceshipCollision(Point projectile_center, int pro
 }
 
 void CollisionDetector::checkPlayerCollision() {
-  int player_size = _player->get_size() / 2;
-  Point player_center = _player->get_center();
+  int player_size = _player->getSize() / 2;
+  Point player_center = _player->getCenter();
 
   for (std::vector<Enemy*>::iterator enemy = _enemies.begin(); enemy != _enemies.end(); enemy++) {
     std::vector<Laser*> lasers = (*enemy)->getCurrentLasers();
     for (std::vector<Laser *>::iterator laser = lasers.begin(); laser != lasers.end(); laser++) {
-      Point laser_center = (*laser)->get_center();
-      int laser_size = (*laser)->get_size() / 2;
+      Point laser_center = (*laser)->getCenter();
+      int laser_size = (*laser)->getSize() / 2;
 
       if (checkSpaceshipCollision(laser_center, laser_size, player_center, player_size)) {
         (*enemy)->laserCollision(*laser);
-        _player->take_hit();
+        _player->takeHit();
       }
     }
 
     std::vector<Missile*> missiles = (*enemy)->getCurrentMissiles();
     for (std::vector<Laser *>::iterator missile = lasers.begin(); missile != lasers.end(); missile++) {
-      Point missile_center = (*missile)->get_center();
-      int missile_size = (*missile)->get_size() / 2;
+      Point missile_center = (*missile)->getCenter();
+      int missile_size = (*missile)->getSize() / 2;
 
       if (checkSpaceshipCollision(missile_center, missile_size, player_center, player_size)) {
-        _player->take_hit();
+        _player->takeHit();
       }
     }
   }
@@ -54,27 +54,27 @@ void CollisionDetector::checkPlayerCollision() {
 
 void CollisionDetector::checkEnemyCollision() {
   for (auto enemy = _enemies.begin(); enemy != _enemies.end(); ++enemy) {
-    int enemy_size = (*enemy)->get_size() / 2;
-    Point enemy_center = (*enemy)->get_center();
+    int enemy_size = (*enemy)->getSize() / 2;
+    Point enemy_center = (*enemy)->getCenter();
 
     std::vector<Laser*> lasers = _player->getCurrentLasers();
     for (std::vector<Laser *>::iterator laser = lasers.begin(); laser != lasers.end(); laser++) {
-      Point laser_center = (*laser)->get_center();
-      int laser_size = (*laser)->get_size() / 2;
+      Point laser_center = (*laser)->getCenter();
+      int laser_size = (*laser)->getSize() / 2;
 
       if (checkSpaceshipCollision(laser_center, laser_size, enemy_center, enemy_size)) {
         _player->laserCollision(*laser);
-        (*enemy)->take_hit();
+        (*enemy)->takeHit();
       }
     }
 
     std::vector<Missile*> missiles = _player->getCurrentMissiles();
     for (std::vector<Missile *>::iterator missile = missiles.begin(); missile != missiles.end(); missile++) {
-      Point missile_center = (*missile)->get_center();
-      int missile_size = (*missile)->get_size() / 2;
+      Point missile_center = (*missile)->getCenter();
+      int missile_size = (*missile)->getSize() / 2;
 
       if (checkSpaceshipCollision(missile_center, missile_size, enemy_center, enemy_size)) {
-        (*enemy)->take_hit();
+        (*enemy)->takeHit();
       }
     }
   }
@@ -110,8 +110,8 @@ void CollisionDetector::checkAllBoundaryCollision() {
 
     std::vector<Laser*> lasers = _player->getCurrentLasers();
     for (std::vector<Laser *>::iterator laser = lasers.begin(); laser != lasers.end(); laser++) {
-      Point laser_center = (*laser)->get_center();
-      int laser_size = (*laser)->get_size() / 2;
+      Point laser_center = (*laser)->getCenter();
+      int laser_size = (*laser)->getSize() / 2;
 
       if (checkBoundaryCollision(laser_center, laser_size)) {
         (*enemy)->laserCollision(*laser);
@@ -120,16 +120,16 @@ void CollisionDetector::checkAllBoundaryCollision() {
 
     std::vector<Missile*> missiles = _player->getCurrentMissiles();
     for (std::vector<Missile *>::iterator missile = missiles.begin(); missile != missiles.end(); missile++) {
-      Point missile_center = (*missile)->get_center();
-      int missile_size = (*missile)->get_size() / 2;
+      Point missile_center = (*missile)->getCenter();
+      int missile_size = (*missile)->getSize() / 2;
 
       if (checkBoundaryCollision(missile_center, missile_size)) {
         (*enemy)->missileCollision(*missile);
       }
     }
 
-    int enemy_size = (*enemy)->get_size() / 2;
-    Point enemy_center = (*enemy)->get_center();
+    int enemy_size = (*enemy)->getSize() / 2;
+    Point enemy_center = (*enemy)->getCenter();
     
     dir::direction direc = checkBoundaryCollision(enemy_center, enemy_size);
     if (direc) {
@@ -139,8 +139,8 @@ void CollisionDetector::checkAllBoundaryCollision() {
 
   std::vector<Laser*> lasers = _player->getCurrentLasers();
   for (std::vector<Laser *>::iterator laser = lasers.begin(); laser != lasers.end(); laser++) {
-    Point laser_center = (*laser)->get_center();
-    int laser_size = (*laser)->get_size() / 2;
+    Point laser_center = (*laser)->getCenter();
+    int laser_size = (*laser)->getSize() / 2;
 
     if (checkBoundaryCollision(laser_center, laser_size)) {
       _player->laserCollision(*laser);
@@ -149,16 +149,16 @@ void CollisionDetector::checkAllBoundaryCollision() {
 
   std::vector<Missile*> missiles = _player->getCurrentMissiles();
   for (std::vector<Missile *>::iterator missile = missiles.begin(); missile != missiles.end(); missile++) {
-    Point missile_center = (*missile)->get_center();
-    int missile_size = (*missile)->get_size() / 2;
+    Point missile_center = (*missile)->getCenter();
+    int missile_size = (*missile)->getSize() / 2;
 
     if (checkBoundaryCollision(missile_center, missile_size)) {
       _player->missileCollision(*missile);
     }
   }
 
-  int player_size = _player->get_size() / 2;
-  Point player_center = _player->get_center();
+  int player_size = _player->getSize() / 2;
+  Point player_center = _player->getCenter();
   dir::direction direction = checkBoundaryCollision(player_center, player_size);
   if (direction) {
     _player->boundaryCollision(direction);

@@ -20,11 +20,11 @@ void Projectile::update(double dt) {
   _center = _center + _movement * dt;
 }
 
-Point Projectile::get_center() {
+Point Projectile::getCenter() {
   return _center;
 }
 
-int Projectile::get_size() {
+int Projectile::getSize() {
   return _size;
 }
 

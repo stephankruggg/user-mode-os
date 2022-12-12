@@ -33,11 +33,11 @@ class Spaceship {
     virtual void loadSprites() {  };
     void drawDead();
 
-    void reset_movement();
-    void move_up();
-    void move_down();
-    void move_left();
-    void move_right();
+    void resetMovement();
+    void moveUp();
+    void moveDown();
+    void moveLeft();
+    void moveRight();
     virtual void boundaryCollision() {  };
     void laserCollision(Laser * laser);
     void missileCollision(Missile * missile);
@@ -45,10 +45,10 @@ class Spaceship {
     void shootLasers(std::vector<double> angles, std::vector<Vector> movements);
     void shootMissiles(std::vector<double> angles, std::vector<Vector> movements);
 
-    void take_hit();
+    void takeHit();
 
-    Point get_center();
-    int get_size();
+    Point getCenter();
+    int getSize();
 
     void deathAnimation();
     void die();

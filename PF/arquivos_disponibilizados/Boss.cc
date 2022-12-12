@@ -31,14 +31,14 @@ void Boss::draw() {
 void Boss::move() {
   if (_center.x < _minXPosition) {
     if (_movement.x != 0) {
-      reset_movement();
+      resetMovement();
     }
   }
-  else move_left();
+  else moveLeft();
 
-  if (_center.y > _minYPosition && _movement.y <= 0) move_up();
-  else if (_center.y < _maxYPosition && _movement.y >= 0) move_down();
-  else reset_movement();
+  if (_center.y > _minYPosition && _movement.y <= 0) moveUp();
+  else if (_center.y < _maxYPosition && _movement.y >= 0) moveDown();
+  else resetMovement();
 }
 
 void Boss::shoot() {

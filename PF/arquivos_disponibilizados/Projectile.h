@@ -29,8 +29,8 @@ class Projectile {
 
     virtual void draw() {  };
 
-    Point get_center();
-    int get_size();
+    Point getCenter();
+    int getSize();
 
   protected:
     int _size;

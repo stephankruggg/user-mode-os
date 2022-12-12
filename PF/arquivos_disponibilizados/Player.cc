@@ -51,7 +51,7 @@ st::state Player::run(double dt) {
   updateMissiles(dt);
   resetTimers();
   selectAnimation();
-  reset_movement();
+  resetMovement();
   return _currentState;
 }
 
@@ -61,7 +61,7 @@ void Player::loadSprites() {
 }
 
 void Player::boundaryCollision(dir::direction direction) {
-  reset_movement();
+  resetMovement();
   switch (direction) {
     case dir::UP:
       _center.y = _size / 2 + 1;

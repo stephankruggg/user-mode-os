@@ -17,7 +17,7 @@ NormalEnemy::NormalEnemy(ALLEGRO_COLOR color, int size, double speed, int maxLif
 }
 
 void NormalEnemy::move() {
-  move_left();
+  moveLeft();
 }
 
 void NormalEnemy::shoot() {
@@ -42,7 +42,7 @@ void NormalEnemy::loadSprites() {
 void NormalEnemy::boundaryCollision(dir::direction direction) {
   if (direction == dir::direction::LEFT) {
     _life = 0;
-    reset_movement();
+    resetMovement();
   }
 }
 
