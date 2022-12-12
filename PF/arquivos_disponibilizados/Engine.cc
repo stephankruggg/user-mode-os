@@ -153,6 +153,7 @@ void Engine::draw() {
    while (!_finish) {
       if (_redraw) {
          _window->draw();
+         _player->drawLife();
          _redraw = false;
          al_flip_display();
       }

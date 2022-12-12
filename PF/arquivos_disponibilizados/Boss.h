@@ -24,7 +24,7 @@ __BEGIN_API
 class Boss : public Enemy {
 
   public:
-    Boss (ALLEGRO_COLOR color, int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay, Player * player);
+    Boss (ALLEGRO_COLOR color, int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay, Player * player, double hitDelay);
     ~Boss() {  };
     
     void move();

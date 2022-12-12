@@ -10,7 +10,7 @@
 
 __BEGIN_API
 
-Enemy::Enemy(ALLEGRO_COLOR color, int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay) : Spaceship(size, speed, maxLife, position, missileColor, laserColor, missileDelay, laserDelay) {
+Enemy::Enemy(ALLEGRO_COLOR color, int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay, double hitDelay) : Spaceship(size, speed, maxLife, position, missileColor, laserColor, missileDelay, laserDelay, hitDelay) {
   _color = color;
   _fireDelay = std::make_shared<Timer> (60);   
   _fireDelay->create();

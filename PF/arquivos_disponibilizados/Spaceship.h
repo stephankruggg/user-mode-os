@@ -24,7 +24,7 @@ __BEGIN_API
 class Spaceship {
 
   public:
-    Spaceship(int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay);
+    Spaceship(int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay, double hitDelay);
     ~Spaceship() {  };
 
     void update(double dt);
@@ -65,6 +65,9 @@ class Spaceship {
   protected:
     int _maxLife;
     int _life;
+    double _hitDelay;
+    std::shared_ptr<Timer> _hitTimer;
+
     int _size;
 
     double _speed;

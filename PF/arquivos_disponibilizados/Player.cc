@@ -10,7 +10,7 @@
 
 __BEGIN_API
 
-Player::Player(int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay) : Spaceship(size, speed, maxLife, position, missileColor, laserColor, missileDelay, laserDelay) {
+Player::Player(int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay, double hitDelay) : Spaceship(size, speed, maxLife, position, missileColor, laserColor, missileDelay, laserDelay, hitDelay) {
   _missileMovement = Vector(500, 0);
   _laserMovement = Vector(500, 0);
   _deathAnimationFrame = 0;
@@ -21,7 +21,7 @@ void Player::draw() {
     _sprite->draw_region(_spriteRow, _spriteCol, 47.0, 40.0, _center, 0);
   } else {
     drawDead();
-  } 
+  }
 }
 
 void Player::selectAnimation() {
@@ -34,8 +34,15 @@ void Player::selectAnimation() {
 }
 
 void Player::drawLife() {
-  al_draw_line(_center.x - _size*2, _center.y + _size*2, (_center.x - _size*2) + (_life / _maxLife) * (_size*4), _center.y + _size*2,
-		al_map_rgb(255 * (1.0 - _life / _maxLife), 200 * (_life / _maxLife), 0), 5);
+  int xPosition = 750;
+  int yPosition = 20;
+  int xOffset = 20;
+  int yOffset = 20;
+
+  for (int i = 0; i < _life; ++i) {
+    al_draw_rectangle(xPosition, yPosition, xPosition + xOffset, yPosition + yOffset, al_map_rgb(0, 255, 0), 1);
+    xPosition -= 30;
+  }
 }
 
 st::state Player::run(double dt) {

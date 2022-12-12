@@ -19,7 +19,7 @@ __BEGIN_API
 class Player : public Spaceship {
 
   public:
-    Player(int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay);
+    Player(int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay, double hitDelay);
     ~Player() {  };
 
     void boundaryCollision(dir::direction direction);

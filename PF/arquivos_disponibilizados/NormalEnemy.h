@@ -17,7 +17,7 @@ __BEGIN_API
 class NormalEnemy : public Enemy {
 
   public:
-    NormalEnemy(ALLEGRO_COLOR _color, int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay);
+    NormalEnemy(ALLEGRO_COLOR _color, int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay, double hitDelay);
     ~NormalEnemy() {  };
 
     void boundaryCollision(dir::direction direction);

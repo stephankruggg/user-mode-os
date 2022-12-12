@@ -10,7 +10,7 @@
 
 __BEGIN_API
 
-Spaceship::Spaceship(int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay) {
+Spaceship::Spaceship(int size, double speed, int maxLife, Point position, ALLEGRO_COLOR missileColor, ALLEGRO_COLOR laserColor, double missileDelay, double laserDelay, double hitDelay) {
   reset_movement();
   _center = position;
   _size = size;
@@ -21,8 +21,11 @@ Spaceship::Spaceship(int size, double speed, int maxLife, Point position, ALLEGR
   _laserColor = laserColor;
   _missileDelay = missileDelay;
   _laserDelay = laserDelay;
+  _hitDelay = hitDelay;
+  _hitTimer = std::make_shared<Timer> (1);
   _missileTimer = std::make_shared<Timer> (1);
   _laserTimer = std::make_shared<Timer> (2);
+  _hitTimer->create();
   _missileTimer->create();
   _laserTimer->create();
   _currentState = st::ALIVE;
@@ -76,7 +79,10 @@ void Spaceship::shootMissiles(std::vector<double> angles, std::vector<Vector> mo
 }
 
 void Spaceship::take_hit() {
-  _life--;
+  if (!_hitTimer->isRunning()) {
+    _hitTimer->startTimer();
+    _life--;
+  }
 }
 
 Point Spaceship::get_center() {
@@ -126,9 +132,15 @@ void Spaceship::resetTimers() {
     _laserTimer->stopTimer(); 
     _laserTimer->resetCount();
   }
+
   if (_missileTimer->getCount() >= _missileDelay) {
     _missileTimer->resetCount();
     _missileTimer->stopTimer();
+  }
+
+  if (_hitTimer->getCount() >= _hitDelay) {
+    _hitTimer->resetCount();
+    _hitTimer->stopTimer();
   }
 }
 
