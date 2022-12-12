@@ -22,7 +22,7 @@ class CollisionDetector {
 
   public:
     CollisionDetector();
-    ~CollisionDetector();
+    ~CollisionDetector() {  };
 
     bool checkSpaceshipCollision(Point protectile_center, int projectile_size, Point spaceship_center, int spaceship_size);
     void checkPlayerCollision();

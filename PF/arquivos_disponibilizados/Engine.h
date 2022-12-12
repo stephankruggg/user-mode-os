@@ -64,6 +64,14 @@ class Engine {
    static CollisionDetector * _collisionDetector;
    static Mine * _mine;
 
+   static Thread * _threadRun;
+   static Thread * _threadDraw;
+   static Thread * _threadSpawn;
+   static Thread * _threadInput;
+   static Thread * _threadCollision;
+   static Thread * _threadPlayer;
+   static Thread * _threadBoss;
+
    static void loadSprites();
 
    static int _displayWidth;
@@ -75,9 +83,9 @@ class Engine {
    static ALLEGRO_DISPLAY *_display;
 
    static bool _finish;
-   static float _prevTime;
-   static float _dt;
-   static float _crtTime;
+   static double _prevTime;
+   static double _dt;
+   static double _crtTime;
    static bool _redraw;
 
 };

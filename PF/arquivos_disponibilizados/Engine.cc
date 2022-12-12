@@ -22,17 +22,28 @@ Input * Engine::_input;
 Spawner * Engine::_spawner;
 CollisionDetector * Engine::_collisionDetector;
 Mine * Engine::_mine = NULL;
+
+Thread * Engine::_threadRun;
+Thread * Engine::_threadDraw;
+Thread * Engine::_threadSpawn;
+Thread * Engine::_threadInput;
+Thread * Engine::_threadCollision;
+Thread * Engine::_threadPlayer;
+Thread * Engine::_threadBoss;
+
 ALLEGRO_EVENT_QUEUE * Engine::_eventQueue = NULL;
-bool Engine::_finish = false;
 ALLEGRO_TIMER * Engine::_timer = NULL;
+ALLEGRO_DISPLAY * Engine::_display;
+
 int Engine::_fps = 60;
 int Engine::_displayHeight = 600;
 int Engine::_displayWidth = 800;
-ALLEGRO_DISPLAY * Engine::_display;
-float Engine::_prevTime = 0;
-float Engine::_dt = 0;
-float Engine::_crtTime = 0;
+bool Engine::_finish = false;
 bool Engine::_redraw = true;
+
+double Engine::_prevTime = 0;
+double Engine::_crtTime = 0;
+double Engine::_dt = 0;
 
 Engine::Engine() {  }
 
@@ -40,16 +51,32 @@ Engine::~Engine() {
    if (_timer != NULL) al_destroy_timer(_timer);
    if (_eventQueue != NULL) al_destroy_event_queue(_eventQueue);
    if (_display != NULL) al_destroy_display(_display);
+
+   if (_window) delete _window;
+   if (_player) delete _player;
+   if (_background) delete _background;
+   if (_spawner) delete _spawner;
+   if (_collisionDetector) delete _collisionDetector;
+   if (_input) delete _input;
+
+   if (_threadRun) delete _threadRun;
+   if (_threadDraw) delete _threadDraw;
+   if (_threadSpawn) delete _threadSpawn;
+   if (_threadInput) delete _threadInput;
+   if (_threadCollision) delete _threadCollision;
+   if (_threadPlayer) delete _threadPlayer;
+   if (_threadBoss) delete _threadBoss;
+
 }
 
 void Engine::init(void * name) {
-   new Thread(run);
-   new Thread(draw);
-   new Thread(spawn);
-   new Thread(input);
-   new Thread(collision);
-   new Thread(player);
-   new Thread(boss);
+   _threadRun = new Thread(run);
+   _threadDraw = new Thread(draw);
+   _threadSpawn = new Thread(spawn);
+   _threadInput = new Thread(input);
+   _threadCollision = new Thread(collision);
+   _threadPlayer = new Thread(player);
+   _threadBoss = new Thread(boss);
 
    al_init();
 
@@ -85,7 +112,21 @@ void Engine::init(void * name) {
 
    loadSprites();
 
-   run();
+   _threadRun->join();
+   _threadDraw->join();
+   _threadSpawn->join();
+   _threadInput->join();
+   _threadCollision->join();
+   _threadPlayer->join();
+   _threadBoss->join();
+
+   _threadRun->thread_exit(0);
+   _threadDraw->thread_exit(1);
+   _threadSpawn->thread_exit(2);
+   _threadInput->thread_exit(3);
+   _threadCollision->thread_exit(4);
+   _threadPlayer->thread_exit(5);
+   _threadBoss->thread_exit(6);
 }
 
 

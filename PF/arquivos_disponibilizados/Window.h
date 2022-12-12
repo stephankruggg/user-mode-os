@@ -21,7 +21,7 @@ class Window {
 
   public:
     Window(ALLEGRO_EVENT_QUEUE * eventQueue);
-    ~Window();
+    ~Window() {  };
 
     void draw();
     void drawBackground();
